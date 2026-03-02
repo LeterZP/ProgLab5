@@ -1,0 +1,3 @@
+package elements
+
+enum class Goverment {ARISTOCRACY, ANARCHY, KLEPTOCRACY, CORPORATOCRACY, JUNTA}
