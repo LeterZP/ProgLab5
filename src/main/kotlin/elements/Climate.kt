@@ -1,4 +1,3 @@
 package elements
 
-class Climate {
-}
+enum class Climate {RAIN_FOREST, MONSOON, HUMIDCONTINENTAL, SUBARCTIC, TUNDRA}
