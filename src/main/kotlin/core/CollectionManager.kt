@@ -1,11 +1,13 @@
 package core
 
 import elements.City
-import exceptions.CollectionHasNoElement
+import exceptions.CollectionHasNoElementException
 import java.util.Stack
+import java.time.LocalTime
 
-class CollectionManager {
+class CollectionManager() {
     private val collection: Stack<City> = Stack<City>()
+    val initializationTime: LocalTime = LocalTime.now()
 
     fun sortElements() {
         collection.sort()
@@ -13,18 +15,23 @@ class CollectionManager {
 
     fun addElement(element: City) {
         collection.push(element)
+        sortElements()
     }
 
     fun getElement(id: Long): City {
-        if (collection.empty()) throw CollectionHasNoElement(id)
+        if (collection.empty()) throw CollectionHasNoElementException(id)
         var element: City? = null
         for (e in collection) {
             if (e.id == id) element = e
         }
-        return element?: throw CollectionHasNoElement(id)
+        return element?: throw CollectionHasNoElementException(id)
     }
 
     fun removeElement(id: Long) {
-        if (!collection.remove(this.getElement(id))) throw CollectionHasNoElement(id)
+        if (!collection.remove(this.getElement(id))) throw CollectionHasNoElementException(id)
+    }
+
+    fun getSize(): Int {
+        return collection.size
     }
 }
