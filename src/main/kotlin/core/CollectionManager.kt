@@ -6,7 +6,7 @@ import java.util.Stack
 import java.time.LocalTime
 
 class CollectionManager() {
-    private val collection: Stack<City> = Stack<City>()
+    val collection: Stack<City> = Stack<City>()
     val initializationTime: LocalTime = LocalTime.now()
 
     fun sortElements() {

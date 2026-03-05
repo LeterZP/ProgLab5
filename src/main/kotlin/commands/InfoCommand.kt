@@ -1,24 +1,23 @@
 package commands
 
-import core.CollectionManager
-import exceptions.InvalidAmountOfArgumentsException
+import core.CommandInvoker
 
-class InfoCommand(private val cm: CollectionManager): Command(cm) {
+class InfoCommand(ci: CommandInvoker): Command(ci) {
     override fun describe(): String {
         return "Выводит всю информацию о коллекции"
     }
 
     override fun execute(token: List<String>) {
-        if (token.size != tokenAmount) throw InvalidAmountOfArgumentsException(this, token.size)
-        val time = cm.initializationTime
-        val size = cm.getSize()
+        super.execute(token)
+        val time = ci.cm.initializationTime
+        val size = ci.cm.getSize()
         println("Информация о коллекции:")
         println("  --Тип коллекции: java.util.Stack")
         println("  --Дата инициализации коллекции: $time")
         println("  --Количество элементов в коллекции: $size")
     }
 
-    override fun toString(): String {
+    override fun getName(): String {
         return "info"
     }
 }

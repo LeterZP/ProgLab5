@@ -1,18 +1,29 @@
 package commands
 
-import core.CollectionManager
+import core.CommandInvoker
+import exceptions.InvalidAmountOfArgumentsException
 
-abstract class Command(private val cm: CollectionManager) {
-    val tokenAmount: Int = 0
-
-    open fun execute(token: List<String>) {
-        println("...command execution...")
-    }
-    open fun describe(): String {
-        return "Just a default command, nothing more, nothing less"
-    }
+abstract class Command(protected val ci: CommandInvoker) {
+    open val tokenAmount: Int = 0
 
     override fun toString(): String {
-        return "default command"
+        if (tokenAmount == 0) return getName()
+        return getName() + " " + getSyntax()
+    }
+
+    open fun execute(token: List<String>) {
+        if (token.size != tokenAmount) throw InvalidAmountOfArgumentsException(this, token.size)
+    }
+
+    open fun describe(): String {
+        return "У этой команды нет описания"
+    }
+
+    open fun getSyntax(): String {
+        return ""
+    }
+
+    open fun getName(): String {
+        return "Command"
     }
 }

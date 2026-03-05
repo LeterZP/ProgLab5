@@ -10,7 +10,7 @@ class City(
     private var population: Int,
     private var metersAboveSeaLevel: Long,
     private var populationDensity: Float,
-    private var governon: Human?,
+    private var governon: Human,
     private var climate: Climate? = null,
     private var government: Government? = null
 ): Comparable<City> {
@@ -45,5 +45,23 @@ class City(
             if (this.id == other.id) return true
         }
         return false
+    }
+
+    override fun toString(): String {
+        var output: String = """
+           Город $name
+            расположен по координатам $coordinates 
+            $metersAboveSeaLevel метров над уровнем моря
+            занимает площадь $area
+            с населением $population и его плотностью $populationDensity
+            управляет им $governon
+        """
+        if (government != null) {
+            output += "методом $government"
+        }
+        if (climate != null) {
+            output += "да и погода там $climate"
+        }
+        return output
     }
 }

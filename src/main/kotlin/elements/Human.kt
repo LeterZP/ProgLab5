@@ -8,4 +8,8 @@ class Human(private val name: String, private val age: Long, private val height:
         if (age <= 0) throw InvalidElementValueException(age)
         if (height <= 0) throw InvalidElementValueException(height)
     }
+
+    override fun toString(): String {
+        return "$name, возраст $age, рост $height"
+    }
 }
