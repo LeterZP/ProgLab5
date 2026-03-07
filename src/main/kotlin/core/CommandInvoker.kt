@@ -10,6 +10,8 @@ class CommandInvoker(val cm: CollectionManager) {
         initializeCommand(HelpCommand(this))
         initializeCommand(InfoCommand(this))
         initializeCommand(ShowCommand(this))
+        initializeCommand(AddCommand(this))
+        initializeCommand(ExitCommand(this))
     }
 
     fun initializeCommand(command: Command) {
@@ -19,6 +21,7 @@ class CommandInvoker(val cm: CollectionManager) {
 
     fun readCommand() {
         val instruction: List<String> = readln().split(" ")
+        if (instruction.size == 1 && instruction[0] == "") return
         commands.get(instruction[0])?.execute(instruction.minus(instruction[0])) ?: throw CommandNotFoundException(instruction[0])
     }
 }

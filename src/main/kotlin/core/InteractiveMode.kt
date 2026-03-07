@@ -11,6 +11,8 @@ class InteractiveMode(private val cm: CollectionManager) {
                 print("=> ")
                 ci.readCommand()
             }
+        } catch (e: ProgramExitException) {
+            return
         } catch (e: CollectionHasNoElementException) {
             // логика
         } catch (e: CommandNotFoundException) {

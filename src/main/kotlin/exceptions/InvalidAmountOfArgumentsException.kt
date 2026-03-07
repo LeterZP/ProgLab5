@@ -2,7 +2,7 @@ package exceptions
 
 import commands.Command
 
-class InvalidAmountOfArgumentsException(command: Command, amount: Int): Exception() {
+class InvalidAmountOfArgumentsException(private val command: Command, private val amount: Int): Exception() {
     private val name: String = command.toString()
     private val realAmount: Int = command.tokenAmount
 

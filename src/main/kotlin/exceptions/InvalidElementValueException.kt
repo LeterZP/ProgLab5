@@ -1,5 +1,5 @@
 package exceptions
 
-class InvalidElementValueException(value: Any): Exception() {
-    override val message: String = "Collection element has value '$value' that can't be initialized"
+class InvalidElementValueException(private val value: Any): Exception() {
+    override val message: String = "Значение '$value' не может быть задано"
 }

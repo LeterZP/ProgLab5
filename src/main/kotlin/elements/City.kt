@@ -14,7 +14,6 @@ class City(
     private var climate: Climate? = null,
     private var government: Government? = null
 ): Comparable<City> {
-    private companion object { private var counter: Long = 1}
 
     val id: Long = counter
     private val creationDate: LocalDate = LocalDate.now()
@@ -24,15 +23,15 @@ class City(
         counter++
     }
 
-    private fun checkValues(name: String? = null,
-                            area: Double? = null,
-                            population: Int? = null,
-                            populationDensity: Float? = null
+    private fun checkValues(name: String,
+                            area: Double,
+                            population: Int,
+                            populationDensity: Float
     ) {
-        if (name != null && name == "") throw InvalidElementValueException(name)
-        if (area != null && area <= 0) throw InvalidElementValueException(area)
-        if (population != null && population <= 0) throw InvalidElementValueException(population)
-        if (populationDensity != null && populationDensity <= 0) throw InvalidElementValueException(populationDensity)
+        if (name == "") throw InvalidElementValueException(name)
+        if (area <= 0) throw InvalidElementValueException(area)
+        if (population <= 0) throw InvalidElementValueException(population)
+        if (populationDensity <= 0) throw InvalidElementValueException(populationDensity)
     }
 
     override fun compareTo(other: City): Int {
@@ -49,13 +48,14 @@ class City(
 
     override fun toString(): String {
         var output: String = """
-           Город $name
-            расположен по координатам $coordinates 
-            $metersAboveSeaLevel метров над уровнем моря
-            занимает площадь $area
-            с населением $population и его плотностью $populationDensity
-            управляет им $governon
-        """
+           --$id: Город $name 
+                был создан $creationDate
+                расположен по координатам $coordinates 
+                $metersAboveSeaLevel метров над уровнем моря
+                занимает площадь $area
+                с населением $population и его плотностью $populationDensity
+                управляет им $governon
+        """.trimIndent()
         if (government != null) {
             output += "методом $government"
         }
@@ -63,5 +63,84 @@ class City(
             output += "да и погода там $climate"
         }
         return output
+    }
+
+    companion object {
+        private var counter: Long = 1
+
+        class Creator() {
+            var name: String? = null
+                set(value) {
+                    if (value == null) throw InvalidElementValueException("")
+                    field = value
+                }
+            var coordinateX: Int? = null
+                set(value) {
+                    if (value is Int && value > -827) field = value
+                    else throw InvalidElementValueException(value?: "")
+                }
+            var coordinateY: Double? = null
+                set(value) {
+                    if (value == null) throw InvalidElementValueException("")
+                    field = value
+                }
+            var area: Double? = null
+                set(value) {
+                    if (value is Double && value > 0) field = value
+                    else throw InvalidElementValueException(value?: "")
+                }
+            var population: Int? = null
+                set(value) {
+                    if (value is Int && value > 0) field = value
+                    else throw InvalidElementValueException(value?: "")
+                }
+            var metersAboveSeaLevel: Long? = null
+                set(value) {
+                    if (value == null) throw InvalidElementValueException("")
+                    field = value
+                }
+            var populationDensity: Float? = null
+                set(value) {
+                    if (value is Float && value > 0) field = value
+                    else throw InvalidElementValueException(value?: "")
+                }
+            var govName: String? = null
+                set(value) {
+                    if (value == null) throw InvalidElementValueException("")
+                    field = value
+                }
+            var govAge: Long? = null
+                set(value) {
+                    if (value is Long && value > 0) field = value
+                    else throw InvalidElementValueException(value?: "")
+                }
+            var govHeight: Float? = null
+                set(value) {
+                    if (value is Float && value > 0) field = value
+                    else throw InvalidElementValueException(value?: "")
+                }
+            var climate: Climate? = null
+            var government: Government? = null
+
+            fun create(): City {
+                if (name != null
+                    && coordinateX != null
+                    && coordinateY != null
+                    && area != null
+                    && population != null
+                    && metersAboveSeaLevel != null
+                    && populationDensity != null
+                    && govName != null
+                    && govAge != null
+                    && govHeight != null
+                ) {
+                    val cords: Coordinates = Coordinates(coordinateX!!, coordinateY!!)
+                    val governon: Human = Human(govName!!, govAge!!, govHeight!!)
+                    return City(name!!, cords, area!!,
+                        population!!, metersAboveSeaLevel!!, populationDensity!!,
+                        governon, climate, government)
+                } else throw InvalidElementValueException("City")
+            }
+        }
     }
 }

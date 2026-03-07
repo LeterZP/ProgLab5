@@ -1,5 +1,5 @@
 package exceptions
 
-class CommandNotFoundException(command: String): Exception() {
+class CommandNotFoundException(private val command: String): Exception() {
     override val message: String = "Команда $command не найдена"
 }
