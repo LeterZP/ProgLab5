@@ -15,10 +15,6 @@ class InteractiveMode(private val cm: CollectionManager) {
             return
         } catch (e: CollectionHasNoElementException) {
             // логика
-        } catch (e: CommandNotFoundException) {
-            // логика
-        } catch (e: InvalidAmountOfArgumentsException) {
-            // логика
         } catch (e: InvalidElementValueException) {
             // логика
         } catch (e: Exception) {

@@ -1,6 +1,7 @@
 package commands
 
 import core.CommandInvoker
+import exceptions.CommandNotFoundException
 import exceptions.InvalidAmountOfArgumentsException
 
 class HelpCommand(ci: CommandInvoker): Command(ci) {
@@ -23,6 +24,8 @@ class HelpCommand(ci: CommandInvoker): Command(ci) {
         } else if (token.size == 1) {
             if (token[0] in ci.commands.keys) {
                 getFullInfo(ci.commands.get(token[0])!!)
+            } else {
+                throw CommandNotFoundException(token[0])
             }
         } else throw InvalidAmountOfArgumentsException(this, token.size)
     }

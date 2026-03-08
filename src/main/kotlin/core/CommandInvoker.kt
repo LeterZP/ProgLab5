@@ -2,6 +2,7 @@ package core
 
 import commands.*
 import exceptions.CommandNotFoundException
+import exceptions.InvalidAmountOfArgumentsException
 
 class CommandInvoker(val cm: CollectionManager) {
     val commands: HashMap<String, Command> = HashMap()
@@ -11,6 +12,7 @@ class CommandInvoker(val cm: CollectionManager) {
         initializeCommand(InfoCommand(this))
         initializeCommand(ShowCommand(this))
         initializeCommand(AddCommand(this))
+        initializeCommand(RemoveByIdCommand(this))
         initializeCommand(ExitCommand(this))
     }
 
@@ -20,8 +22,15 @@ class CommandInvoker(val cm: CollectionManager) {
     }
 
     fun readCommand() {
-        val instruction: List<String> = readln().split(" ")
-        if (instruction.size == 1 && instruction[0] == "") return
-        commands.get(instruction[0])?.execute(instruction.minus(instruction[0])) ?: throw CommandNotFoundException(instruction[0])
+        try {
+            val instruction: List<String> = readln().split(" ")
+            if (instruction.size == 1 && instruction[0] == "") return
+            commands.get(instruction[0])?.execute(instruction.minus(instruction[0]))
+                ?: throw CommandNotFoundException(instruction[0])
+        } catch (e: CommandNotFoundException) {
+            println(e.message)
+        } catch (e: InvalidAmountOfArgumentsException) {
+            println(e.message)
+        }
     }
 }

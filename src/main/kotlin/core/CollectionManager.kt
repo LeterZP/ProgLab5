@@ -7,8 +7,6 @@ import exceptions.CollectionHasNoElementException
 import exceptions.InvalidElementValueException
 import java.util.Stack
 import java.time.LocalTime
-import java.util.Locale
-import java.util.Locale.getDefault
 
 class CollectionManager() {
     val collection: Stack<City> = Stack<City>()
@@ -60,17 +58,11 @@ class CollectionManager() {
                     8 -> creator.govAge = value?.toLong()
                     9 -> creator.govHeight = value?.toFloat()
                     10 -> creator.climate = run {
-                        value?.capitalize()
-                        val result: Climate?
-                        if (value != null) result = Climate.valueOf(value)
-                        else result = null
+                        val result: Climate? = if (value != null) Climate.valueOf(value.uppercase()) else null
                         result
                     }
                     11 -> creator.government = run {
-                        value?.capitalize()
-                        val result: Government?
-                        if (value != null) result = Government.valueOf(value)
-                        else result = null
+                        val result: Government? = if (value != null) Government.valueOf(value.uppercase()) else null
                         result
                     }
                 }
@@ -80,6 +72,7 @@ class CollectionManager() {
                 throw InvalidElementValueException(value?:"")
             }
             if (counter == 11) collection.push(creator.create())
+            sortElements()
         }
     }
 }

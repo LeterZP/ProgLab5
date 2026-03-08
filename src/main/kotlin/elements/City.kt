@@ -57,10 +57,10 @@ class City(
                 управляет им $governon
         """.trimIndent()
         if (government != null) {
-            output += "методом $government"
+            output += "\nс правительством $government"
         }
         if (climate != null) {
-            output += "да и погода там $climate"
+            output += "\nда и погода там $climate"
         }
         return output
     }
