@@ -4,35 +4,46 @@ import exceptions.InvalidElementValueException
 import java.time.LocalDate
 
 class City(
-    private var name: String,
-    private var coordinates: Coordinates,
-    private var area: Double,
-    private var population: Int,
-    private var metersAboveSeaLevel: Long,
-    private var populationDensity: Float,
-    private var governon: Human,
-    private var climate: Climate? = null,
-    private var government: Government? = null
+    _name: String,
+    _coordinates: Coordinates,
+    _area: Double,
+    _population: Int,
+    _metersAboveSeaLevel: Long,
+    _populationDensity: Float,
+    _governon: Human,
+    _climate: Climate? = null,
+    _government: Government? = null
 ): Comparable<City> {
 
+    var name: String = _name
+        set(value) {
+            if (value == "") throw InvalidElementValueException(value)
+            field = value
+        }
+    var coordinates: Coordinates = _coordinates
+    var area: Double = _area
+        set(value) {
+            if (value <= 0) throw InvalidElementValueException(value)
+            field = value
+        }
+    var population: Int = _population
+        set(value) {
+            if (value <= 0) throw InvalidElementValueException(value)
+            field = value
+        }
+    var metersAboveSeaLevel: Long = _metersAboveSeaLevel
+    var populationDensity: Float = _populationDensity
+        set(value) {
+            if (value <= 0) throw InvalidElementValueException(value)
+            field = value
+        }
+    var governon: Human = _governon
+    var climate: Climate? = _climate
+    var government: Government? = _government
     val id: Long = counter
     private val creationDate: LocalDate = LocalDate.now()
 
-    init{
-        checkValues(name, area, population, populationDensity)
-        counter++
-    }
-
-    private fun checkValues(name: String,
-                            area: Double,
-                            population: Int,
-                            populationDensity: Float
-    ) {
-        if (name == "") throw InvalidElementValueException(name)
-        if (area <= 0) throw InvalidElementValueException(area)
-        if (population <= 0) throw InvalidElementValueException(population)
-        if (populationDensity <= 0) throw InvalidElementValueException(populationDensity)
-    }
+    init{ counter++ }
 
     override fun compareTo(other: City): Int {
         return this.id.compareTo(other.id)
@@ -57,10 +68,10 @@ class City(
                 управляет им $governon
         """.trimIndent()
         if (government != null) {
-            output += "\nс правительством $government"
+            output += "\n     с правительством $government"
         }
         if (climate != null) {
-            output += "\nда и погода там $climate"
+            output += "\n     да и погода там $climate"
         }
         return output
     }
@@ -69,58 +80,100 @@ class City(
         private var counter: Long = 1
 
         class Creator() {
-            var name: String? = null
+            private var name: String? = null
                 set(value) {
                     if (value == null) throw InvalidElementValueException("")
                     field = value
                 }
-            var coordinateX: Int? = null
+            private var coordinateX: Int? = null
                 set(value) {
                     if (value is Int && value > -827) field = value
                     else throw InvalidElementValueException(value?: "")
                 }
-            var coordinateY: Double? = null
+            private var coordinateY: Double? = null
                 set(value) {
                     if (value == null) throw InvalidElementValueException("")
                     field = value
                 }
-            var area: Double? = null
+            private var area: Double? = null
                 set(value) {
                     if (value is Double && value > 0) field = value
                     else throw InvalidElementValueException(value?: "")
                 }
-            var population: Int? = null
+            private var population: Int? = null
                 set(value) {
                     if (value is Int && value > 0) field = value
                     else throw InvalidElementValueException(value?: "")
                 }
-            var metersAboveSeaLevel: Long? = null
+            private var metersAboveSeaLevel: Long? = null
                 set(value) {
                     if (value == null) throw InvalidElementValueException("")
                     field = value
                 }
-            var populationDensity: Float? = null
+            private var populationDensity: Float? = null
                 set(value) {
                     if (value is Float && value > 0) field = value
                     else throw InvalidElementValueException(value?: "")
                 }
-            var govName: String? = null
+            private var govName: String? = null
                 set(value) {
                     if (value == null) throw InvalidElementValueException("")
                     field = value
                 }
-            var govAge: Long? = null
+            private var govAge: Long? = null
                 set(value) {
                     if (value is Long && value > 0) field = value
                     else throw InvalidElementValueException(value?: "")
                 }
-            var govHeight: Float? = null
+            private var govHeight: Float? = null
                 set(value) {
                     if (value is Float && value > 0) field = value
                     else throw InvalidElementValueException(value?: "")
                 }
-            var climate: Climate? = null
-            var government: Government? = null
+            private var climate: Climate? = null
+            private var government: Government? = null
+            val size = 12
+
+            fun getField(count: Int): String? {
+                when (count) {
+                    0 -> return "название города (String)"
+                    1 -> return "координата X (Int)"
+                    2 -> return "координата Y (Double)"
+                    3 -> return "площадь (Double)"
+                    4 -> return "население (Int)"
+                    5 -> return "высоту над уровнем моря (Long)"
+                    6 -> return "плотность населения (Float)"
+                    7 -> return "имя губернатора (String)"
+                    8 -> return "возраст губернатора (Long)"
+                    9 -> return "рост губернатора (Float)"
+                    10 -> return "климат (RAIN_FOREST | MONSOON | HUMIDCONTINENTAL | SUBARCTIC | TUNDRA)"
+                    11 -> return "правительство (ARISTOCRACY | ANARCHY | KLEPTOCRACY | CORPORATOCRACY | JUNTA)"
+                }
+                return null
+            }
+
+            fun setField(value: String?, count: Int) {
+                when (count) {
+                    0 -> name = value
+                    1 -> coordinateX = value?.toInt()
+                    2 -> coordinateY = value?.toDouble()
+                    3 -> area = value?.toDouble()
+                    4 -> population = value?.toInt()
+                    5 -> metersAboveSeaLevel = value?.toLong()
+                    6 -> populationDensity = value?.toFloat()
+                    7 -> govName = value
+                    8 -> govAge = value?.toLong()
+                    9 -> govHeight = value?.toFloat()
+                    10 -> climate = run {
+                        val result: Climate? = if (value != null) Climate.valueOf(value.uppercase()) else null
+                        result
+                    }
+                    11 -> government = run {
+                        val result: Government? = if (value != null) Government.valueOf(value.uppercase()) else null
+                        result
+                    }
+                }
+            }
 
             fun create(): City {
                 if (name != null
@@ -134,8 +187,8 @@ class City(
                     && govAge != null
                     && govHeight != null
                 ) {
-                    val cords: Coordinates = Coordinates(coordinateX!!, coordinateY!!)
-                    val governon: Human = Human(govName!!, govAge!!, govHeight!!)
+                    val cords = Coordinates(coordinateX!!, coordinateY!!)
+                    val governon = Human(govName!!, govAge!!, govHeight!!)
                     return City(name!!, cords, area!!,
                         population!!, metersAboveSeaLevel!!, populationDensity!!,
                         governon, climate, government)

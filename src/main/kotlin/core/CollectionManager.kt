@@ -1,8 +1,6 @@
 package core
 
 import elements.City
-import elements.Climate
-import elements.Government
 import exceptions.CollectionHasNoElementException
 import exceptions.InvalidElementValueException
 import java.util.Stack
@@ -14,11 +12,6 @@ class CollectionManager() {
 
     fun sortElements() {
         collection.sort()
-    }
-
-    fun addElement(element: City) {
-        collection.push(element)
-        sortElements()
     }
 
     fun getElement(id: Long): City {
@@ -41,37 +34,17 @@ class CollectionManager() {
     inner class ElementCreator() {
         val creator: City.Companion.Creator = City.Companion.Creator()
 
-        fun addValue(input: String, counter: Int) {
-            var value: String?
-            if (input == "") value = null
-            else value = input
+        fun addValue(input: String, count: Int) {
+            val value: String? = if (input == "") null
+            else input
             try {
-                when (counter) {
-                    0 -> creator.name = value
-                    1 -> creator.coordinateX = value?.toInt()
-                    2 -> creator.coordinateY = value?.toDouble()
-                    3 -> creator.area = value?.toDouble()
-                    4 -> creator.population = value?.toInt()
-                    5 -> creator.metersAboveSeaLevel = value?.toLong()
-                    6 -> creator.populationDensity = value?.toFloat()
-                    7 -> creator.govName = value
-                    8 -> creator.govAge = value?.toLong()
-                    9 -> creator.govHeight = value?.toFloat()
-                    10 -> creator.climate = run {
-                        val result: Climate? = if (value != null) Climate.valueOf(value.uppercase()) else null
-                        result
-                    }
-                    11 -> creator.government = run {
-                        val result: Government? = if (value != null) Government.valueOf(value.uppercase()) else null
-                        result
-                    }
-                }
-            } catch (e: NumberFormatException) {
+                creator.setField(value, count)
+            } catch (_: NumberFormatException) {
                 throw InvalidElementValueException(value?:"")
-            } catch (e: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 throw InvalidElementValueException(value?:"")
             }
-            if (counter == 11) collection.push(creator.create())
+            if (count == creator.size-1) collection.push(creator.create())
             sortElements()
         }
     }
