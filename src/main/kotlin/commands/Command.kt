@@ -7,7 +7,7 @@ abstract class Command(protected val ci: CommandInvoker) {
     open val tokenAmount: Int = 0
 
     override fun toString(): String {
-        if (tokenAmount == 0) return getName() + getSyntax()
+        if (getSyntax() == "") return getName() + getSyntax()
         return getName() + " " + getSyntax()
     }
 

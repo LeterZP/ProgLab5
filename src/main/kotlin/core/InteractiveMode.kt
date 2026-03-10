@@ -27,6 +27,4 @@ class InteractiveMode(private val cm: CollectionManager) {
         interaction()
         println("Программа завершена. Спасибо за использование!")
     }
-
-
 }

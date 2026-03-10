@@ -30,7 +30,7 @@ class AddCommand(ci: CommandInvoker): Command(ci) {
             print("Введите ")
             print(creator.creator.getField(count))
             print(": ")
-            val value: String = readln()
+            val value: String = ci.readNext()
             try {
                 creator.addValue(value, count)
             } catch (e: InvalidElementValueException) {
