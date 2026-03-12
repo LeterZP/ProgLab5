@@ -14,6 +14,7 @@ class CommandInvoker(val cm: CollectionManager) {
         initializeCommand(ShowCommand(this))
         initializeCommand(AddCommand(this))
         initializeCommand(RemoveByIdCommand(this))
+        initializeCommand(ClearCommand(this))
         initializeCommand(ExitCommand(this))
     }
 

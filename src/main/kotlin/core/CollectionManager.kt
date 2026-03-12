@@ -27,6 +27,8 @@ class CollectionManager() {
         if (!collection.remove(this.getElement(id))) throw CollectionHasNoElementException(id)
     }
 
+    fun clearCollection() { collection.clear() }
+
     fun getSize(): Int {
         return collection.size
     }
