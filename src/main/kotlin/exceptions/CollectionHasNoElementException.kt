@@ -1,5 +1,5 @@
 package exceptions
 
 class CollectionHasNoElementException(private val id: Long): Exception() {
-    override val message: String = "Collection doesn't have an element with id $id"
+    override val message: String = "У коллекции нет элемента с id $id"
 }

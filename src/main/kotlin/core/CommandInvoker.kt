@@ -3,10 +3,11 @@ package core
 import commands.*
 import exceptions.CommandNotFoundException
 import exceptions.InvalidAmountOfArgumentsException
+import java.util.Stack
 
 class CommandInvoker(val cm: CollectionManager) {
     val commands: HashMap<String, Command> = HashMap()
-    private val nextToken: ArrayDeque<String> = ArrayDeque()
+    private val nextToken: Stack<String> = Stack<String>()
 
     init {
         initializeCommand(HelpCommand(this))
@@ -16,6 +17,10 @@ class CommandInvoker(val cm: CollectionManager) {
         initializeCommand(RemoveByIdCommand(this))
         initializeCommand(ClearCommand(this))
         initializeCommand(ExitCommand(this))
+        initializeCommand(RemoveLastCommand(this))
+        initializeCommand(ReorderCommand(this))
+        initializeCommand(GroupCountingByNameCommand(this))
+        initializeCommand(CountGreaterThenMetersAboveSeaLevelCommand(this))
     }
 
     fun initializeCommand(command: Command) {
@@ -48,11 +53,9 @@ class CommandInvoker(val cm: CollectionManager) {
     }
 
     fun addNext(instructions: String) {
-        val values: List<String> = instructions.split("\n")
+        val values: List<String> = instructions.split("\n").reversed()
         for (instruction in values) {
-            if (instruction != "") {
-                nextToken.add(instruction)
-            }
+            nextToken.add(instruction)
         }
     }
 }

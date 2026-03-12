@@ -7,11 +7,30 @@ import java.util.Stack
 import java.time.LocalTime
 
 class CollectionManager() {
-    val collection: Stack<City> = Stack<City>()
+    var collection: Stack<City> = Stack<City>()
     val initializationTime: LocalTime = LocalTime.now()
+    val size: Int = collection.size
 
     fun sortElements() {
         collection.sort()
+    }
+
+    fun reorderElements() {
+        val newCollection: Stack<City> = Stack<City>()
+        while (!collection.isEmpty()) {
+            newCollection.push(collection.pop())
+        }
+        collection = newCollection
+    }
+
+    fun countHigherThen(metersAboveSeaLevel: Long): Int {
+        var count: Int = 0
+        for (element in collection) {
+            if (element.metersAboveSeaLevel > metersAboveSeaLevel) {
+                count++
+            }
+        }
+        return count
     }
 
     fun getElement(id: Long): City {
@@ -23,15 +42,34 @@ class CollectionManager() {
         return element?: throw CollectionHasNoElementException(id)
     }
 
+    fun groupElements(): HashMap<String, Int> {
+        val names: HashMap<String, Int> = HashMap()
+        for (element in collection) {
+            names[element.name] = names[element.name] ?: 0
+            names[element.name] = names[element.name]!! + 1
+        }
+        return names
+    }
+
     fun removeElement(id: Long) {
         if (!collection.remove(this.getElement(id))) throw CollectionHasNoElementException(id)
     }
 
-    fun clearCollection() { collection.clear() }
-
-    fun getSize(): Int {
-        return collection.size
+    fun removeLast() {
+        if (collection.empty()) throw CollectionHasNoElementException(-1)
+        collection.remove(collection.last())
     }
+
+    fun removeGreater(city: City) {
+        collection.sort()
+        while (true) {
+            val element: City = collection.peek()
+            if (element <= city) return
+            collection.pop()
+        }
+    }
+
+    fun clearCollection() { collection.clear() }
 
     inner class ElementCreator() {
         val creator: City.Companion.Creator = City.Companion.Creator()
