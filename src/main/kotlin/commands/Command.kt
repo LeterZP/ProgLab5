@@ -12,6 +12,7 @@ abstract class Command(protected val ci: CommandInvoker) {
     }
 
     open fun execute(token: List<String>) {
+        while (token.contains("")) token.minus("")
         if (token.size != tokenAmount) throw InvalidAmountOfArgumentsException(this, token.size)
     }
 

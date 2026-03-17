@@ -5,9 +5,7 @@ import core.CommandInvoker
 class ShowCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)
-        for (element in ci.cm.collection) {
-            println(element.toString())
-        }
+        println(ci.cm.getAllElementsToString())
     }
 
     override fun describe(): String {

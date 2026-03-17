@@ -1,18 +1,23 @@
 package core
 
 import elements.City
+import elements.Government
 import exceptions.CollectionHasNoElementException
-import exceptions.InvalidElementValueException
 import java.util.Stack
 import java.time.LocalTime
 
 class CollectionManager() {
-    var collection: Stack<City> = Stack<City>()
+    private var collection: Stack<City> = Stack<City>()
     val initializationTime: LocalTime = LocalTime.now()
     val size: Int = collection.size
 
     fun sortElements() {
         collection.sort()
+    }
+
+    fun addElement(city: City) {
+        collection.push(city)
+        sortElements()
     }
 
     fun reorderElements() {
@@ -42,6 +47,25 @@ class CollectionManager() {
         return element?: throw CollectionHasNoElementException(id)
     }
 
+    fun getAllElementsToString(): String {
+        var result: String = ""
+        for (element in collection) {
+            if (result != "") result += "\n"
+            result += element.toString()
+        }
+        return result
+    }
+
+    fun getSortedGovernments(): ArrayList<Government> {
+        val governments: ArrayList<Government> = ArrayList()
+        collection.sortWith(Comparator { city1, city2 -> compareValues(city1.government, city2.government) })
+        for (element in collection) {
+            governments.plus(element.government)
+        }
+        sortElements()
+        return governments
+    }
+
     fun groupElements(): HashMap<String, Int> {
         val names: HashMap<String, Int> = HashMap()
         for (element in collection) {
@@ -60,32 +84,14 @@ class CollectionManager() {
         collection.remove(collection.last())
     }
 
-    fun removeGreater(city: City) {
+    fun removeGreater(id: Long) {
         collection.sort()
         while (true) {
             val element: City = collection.peek()
-            if (element <= city) return
+            if (element.id <= id) return
             collection.pop()
         }
     }
 
     fun clearCollection() { collection.clear() }
-
-    inner class ElementCreator() {
-        val creator: City.Companion.Creator = City.Companion.Creator()
-
-        fun addValue(input: String, count: Int) {
-            val value: String? = if (input == "") null
-            else input
-            try {
-                creator.setField(value, count)
-            } catch (_: NumberFormatException) {
-                throw InvalidElementValueException(value?:"")
-            } catch (_: IllegalArgumentException) {
-                throw InvalidElementValueException(value?:"")
-            }
-            if (count == creator.size-1) collection.push(creator.create())
-            sortElements()
-        }
-    }
 }
