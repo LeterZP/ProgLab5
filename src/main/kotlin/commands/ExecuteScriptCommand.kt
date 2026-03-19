@@ -11,13 +11,6 @@ class ExecuteScriptCommand(ci: CommandInvoker): Command(ci) {
         super.execute(token)
         val reader: ScriptReader = ScriptReader(ci)
         reader.startScript(token[0])
-        try {
-            while (true) {
-                ci.readNext()
-            }
-        } catch (e: NoNextCommandException) {
-            println(e.message)
-        }
     }
 
     override fun describe(): String {

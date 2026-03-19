@@ -5,7 +5,9 @@ import core.CommandInvoker
 class ShowCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)
-        println(ci.cm.getAllElementsToString())
+        val output: String = ci.cm.getAllElementsToString()
+        if (output != "") println(output)
+        else println("Коллекция пуста.")
     }
 
     override fun describe(): String {

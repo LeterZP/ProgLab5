@@ -6,6 +6,7 @@ class ReorderCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)
         ci.cm.reorderElements()
+        println("Коллекция успешно перевёрнута.")
     }
 
     override fun describe(): String {

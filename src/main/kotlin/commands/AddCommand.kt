@@ -14,11 +14,7 @@ class AddCommand(ci: CommandInvoker): Command(ci) {
             print("Введите ")
             print(creator.getField(count))
             print(": ")
-            val value: String = try {
-                ci.readNext()
-            } catch (e: NoNextCommandException) {
-                readln()
-            }
+            val value: String = try { ci.readNext() } catch (e: NoNextCommandException) { readln() }
             try {
                 creator.setField(value, count)
             } catch (e: InvalidElementValueException) {
@@ -30,7 +26,7 @@ class AddCommand(ci: CommandInvoker): Command(ci) {
         }
         try {
             ci.cm.addElement(creator.create())
-            println("Элемент успешно добавлен")
+            println("Элемент успешно добавлен.")
         } catch (e: InvalidElementValueException) {
             println(e.message)
         }

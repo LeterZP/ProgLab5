@@ -3,13 +3,25 @@ package core
 import elements.City
 import elements.Government
 import exceptions.CollectionHasNoElementException
+import io.FileReader
+import io.FileWriter
 import java.util.Stack
 import java.time.LocalTime
 
-class CollectionManager() {
+class CollectionManager(private val filepath: String) {
     private var collection: Stack<City> = Stack<City>()
     val initializationTime: LocalTime = LocalTime.now()
     val size: Int = collection.size
+
+    init {
+        val reader: FileReader = FileReader(filepath)
+        collection = reader.readFile()
+    }
+
+    fun saveToFile() {
+        val writer: FileWriter = FileWriter(filepath)
+        writer.writeToFile(collection)
+    }
 
     fun sortElements() {
         collection.sort()
@@ -84,12 +96,14 @@ class CollectionManager() {
         collection.remove(collection.last())
     }
 
-    fun removeGreater(id: Long) {
+    fun removeGreater(id: Long): Int {
+        var count: Int = 0
         collection.sort()
         while (true) {
             val element: City = collection.peek()
-            if (element.id <= id) return
+            if (element.id <= id) return count
             collection.pop()
+            count++
         }
     }
 

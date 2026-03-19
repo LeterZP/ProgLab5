@@ -1,5 +1,5 @@
 package exceptions
 
 class ProgramExitException(): Exception() {
-    override val message: String = "Программа остановлена"
+    override val message: String = "Завершение работы."
 }

@@ -9,7 +9,8 @@ class RemoveGreaterCommand(ci: CommandInvoker): Command(ci){
     override fun execute(token: List<String>) {
         super.execute(token)
         try {
-            ci.cm.removeGreater(token[0].toLong())
+            val count: Int = ci.cm.removeGreater(token[0].toLong())
+            println("Удалено $count элементов.")
         } catch (e: NumberFormatException) {
             throw InvalidElementValueException(token[0])
         }

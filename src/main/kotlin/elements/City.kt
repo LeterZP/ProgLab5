@@ -2,43 +2,64 @@ package elements
 
 import exceptions.InvalidElementValueException
 import java.time.LocalDate
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Contextual
 
+/**
+ * Город.
+ *
+ * Элемент коллекции.
+ *
+ * @property name Название города.
+ * @property coordinates Координаты города, представленные в виде [Coordinates].
+ * @property area Площадь города.
+ * @property population Население города.
+ * @property metersAboveSeaLevel Высота над уровнем моря.
+ * @property populationDensity Плотность населения.
+ * @property governon Губернатор города в виде [Human].
+ * @property climate Климат города в виде [Climate].
+ * @property government Правительство в виде [Government].
+ * @param id Уникальный номер города.
+ * @property creationDate Дата создания города.
+ */
+@Serializable
 class City(
-    name: String,
+    val name1: String,
     var coordinates: Coordinates,
-    area: Double,
-    population: Int,
+    val area1: Double,
+    val population1: Int,
     var metersAboveSeaLevel: Long,
-    populationDensity: Float,
+    val populationDensity1: Float,
     var governon: Human,
     var climate: Climate? = null,
     var government: Government? = null
 ): Comparable<City> {
 
-    var name: String = name
+    var name: String = name1
         set(value) {
             if (value == "") throw InvalidElementValueException(value)
             field = value
         }
-    var area: Double = area
+    var area: Double = area1
         set(value) {
             if (value <= 0) throw InvalidElementValueException(value)
             field = value
         }
-    var population: Int = population
+    var population: Int = population1
         set(value) {
             if (value <= 0) throw InvalidElementValueException(value)
             field = value
         }
-    var populationDensity: Float = populationDensity
+    var populationDensity: Float = populationDensity1
         set(value) {
             if (value <= 0) throw InvalidElementValueException(value)
             field = value
         }
     val id: Long = counter
+    @Contextual
     val creationDate: LocalDate = LocalDate.now()
 
-    companion object { private var counter: Long = 1 }
+    private companion object { private var counter: Long = 1 }
 
     init{ counter++ }
 

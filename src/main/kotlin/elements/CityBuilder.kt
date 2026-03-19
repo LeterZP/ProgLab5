@@ -2,6 +2,25 @@ package elements
 
 import exceptions.InvalidElementValueException
 
+/**
+ * Builder для класса [City].
+ *
+ * Модет поэтапно создавать и изменять объекты класса [City].
+ * @property name [City.name].
+ * @property coordinateX [Coordinates.x].
+ * @property coordinateY [Coordinates.y].
+ * @property area [City.area].
+ * @property population [City.population].
+ * @property metersAboveSeaLevel
+ * @property populationDensity
+ * @property govName
+ * @property govAge
+ * @property govHeight
+ * @property climate
+ * @property government
+ * @property fields
+ * @property size
+ */
 class CityBuilder {
     private var name: String? = null
         set(value) {

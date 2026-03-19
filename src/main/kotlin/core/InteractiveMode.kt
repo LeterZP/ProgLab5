@@ -12,19 +12,16 @@ class InteractiveMode(private val cm: CollectionManager) {
                 ci.readCommand()
             }
         } catch (e: ProgramExitException) {
+            println(e.message)
             return
-        } catch (e: CollectionHasNoElementException) {
-            // логика
-        } catch (e: InvalidElementValueException) {
-            // логика
         } catch (e: Exception) {
-            // логика
+            println("Возникла неизвестная ошибка: " + e.message)
+            println("Экстренное завершение работы")
         }
     }
 
     fun start() {
         println("Программа запущена в интерактивном режиме. Чтобы увидеть список команд, введите help")
         interaction()
-        println("Программа завершена. Спасибо за использование!")
     }
 }

@@ -18,6 +18,7 @@ class CommandInvoker(val cm: CollectionManager) {
         initializeCommand(UpdateCommand(this))
         initializeCommand(RemoveByIdCommand(this))
         initializeCommand(ClearCommand(this))
+        initializeCommand(SaveCommand(this))
         initializeCommand(ExecuteScriptCommand(this))
         initializeCommand(ExitCommand(this))
         initializeCommand(RemoveLastCommand(this))
@@ -34,20 +35,22 @@ class CommandInvoker(val cm: CollectionManager) {
     }
 
     fun readCommand() {
-        try {
-            val instruction: List<String> = try {
-                readNext().split(" ")
-            } catch (e: NoNextCommandException) {
-                readln().split(" ")
+        do {
+            try {
+                val instruction: List<String> = try {
+                    readNext().split(" ")
+                } catch (e: NoNextCommandException) {
+                    readln().split(" ")
+                }
+                if (instruction.size == 1 && instruction[0] == "") return
+                commands.get(instruction[0])?.execute(instruction.minus(instruction[0]))
+                    ?: throw CommandNotFoundException(instruction[0])
+            } catch (e: CommandNotFoundException) {
+                println(e.message)
+            } catch (e: InvalidAmountOfArgumentsException) {
+                println(e.message)
             }
-            if (instruction.size == 1 && instruction[0] == "") return
-            commands.get(instruction[0])?.execute(instruction.minus(instruction[0]))
-                ?: throw CommandNotFoundException(instruction[0])
-        } catch (e: CommandNotFoundException) {
-            println(e.message)
-        } catch (e: InvalidAmountOfArgumentsException) {
-            println(e.message)
-        }
+        } while (!nextToken.isEmpty())
     }
 
     fun readNext(): String {
@@ -63,7 +66,7 @@ class CommandInvoker(val cm: CollectionManager) {
     fun addNext(instructions: String) {
         val values: List<String> = instructions.split("\n").reversed()
         for (instruction in values) {
-            nextToken.add(instruction)
+            nextToken.push(instruction)
         }
     }
 }

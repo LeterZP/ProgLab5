@@ -1,7 +1,9 @@
 package elements
 
 import exceptions.InvalidElementValueException
+import kotlinx.serialization.Serializable
 
+@Serializable
 class Human(private val name: String, private val age: Long, private val height: Float) {
     init{
         if (name == "") throw InvalidElementValueException(name)

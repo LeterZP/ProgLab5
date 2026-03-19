@@ -10,7 +10,7 @@ class ScriptReader(val ci: CommandInvoker) {
             val commands: String = File(file).readText()
             ci.addNext(commands)
         } catch (e: FileNotFoundException) {
-
+            println("Файл не найден. Выполнение скрипта отменено.")
         }
     }
 }
