@@ -5,21 +5,11 @@ import exceptions.InvalidElementValueException
 /**
  * Builder для класса [City].
  *
- * Модет поэтапно создавать и изменять объекты класса [City].
- * @property name [City.name].
- * @property coordinateX [Coordinates.x].
- * @property coordinateY [Coordinates.y].
- * @property area [City.area].
- * @property population [City.population].
- * @property metersAboveSeaLevel
- * @property populationDensity
- * @property govName
- * @property govAge
- * @property govHeight
- * @property climate
- * @property government
- * @property fields
- * @property size
+ * Может поэтапно создавать и изменять объекты класса [City].
+ *
+ * @property size Количество свойств типа [Int], необходимых для создания [City].
+ *
+ * @since 1.0
  */
 class CityBuilder {
     private var name: String? = null
@@ -88,12 +78,31 @@ class CityBuilder {
         "климат (RAIN_FOREST | MONSOON | HUMIDCONTINENTAL | SUBARCTIC | TUNDRA)",
         "правительство (ARISTOCRACY | ANARCHY | KLEPTOCRACY | CORPORATOCRACY | JUNTA)"
     )
-    val size = 12
+    val size: Int = 12
 
+    /**
+     * Используется для получения названия и типа свойства класса.
+     *
+     * @param count Номер свойства типа [Int].
+     *
+     * @return Имя и тип свойства типа [String].
+     *
+     * @since 1.0
+     */
     fun getField(count: Int): String {
         return fields[count]
     }
 
+    /**
+     * Используется для установки значения свойства.
+     *
+     * @param input Новое значение свойства типа [String].
+     * @param count Номер свойства типа [Int].
+     *
+     * @throws InvalidElementValueException В случае, если значение не может быть установлено.
+     *
+     * @since 1.0
+     */
     fun setField(input: String, count: Int) {
         val value: String? = if (input == "") null else input
         try {
@@ -125,6 +134,16 @@ class CityBuilder {
         }
     }
 
+    /**
+     * Создаёт объект типа [City] на основе загруженных полей.
+     *
+     * @return Город типа [City].
+     *
+     * @throws InvalidElementValueException В случае, если какое-либо из установленных значений не подходит под
+     *                                      требования класса [City].
+     *
+     * @since 1.0
+     */
     fun create(): City {
         if (name != null
             && coordinateX != null
@@ -145,6 +164,13 @@ class CityBuilder {
         } else throw InvalidElementValueException("City")
     }
 
+    /**
+     * Изменяет свойства уже имеющегося объекта типа [City].
+     *
+     * @param city Город для изменения типа [City].
+     *
+     * @since 1.0
+     */
     fun update(city: City) {
         if (name != null) city.name = name!!
         if (coordinateX != null && coordinateY != null)

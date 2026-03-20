@@ -10,17 +10,22 @@ import kotlinx.serialization.Contextual
  *
  * Элемент коллекции.
  *
- * @property name Название города.
- * @property coordinates Координаты города, представленные в виде [Coordinates].
- * @property area Площадь города.
- * @property population Население города.
- * @property metersAboveSeaLevel Высота над уровнем моря.
- * @property populationDensity Плотность населения.
- * @property governon Губернатор города в виде [Human].
- * @property climate Климат города в виде [Climate].
- * @property government Правительство в виде [Government].
- * @param id Уникальный номер города.
- * @property creationDate Дата создания города.
+ * @param name Название города типа [String].
+ * @param coordinates Координаты города типа [Coordinates].
+ * @param area Площадь города типа положительный [Double].
+ * @param population Население города типа положительный [Int].
+ * @param metersAboveSeaLevel Высота над уровнем моря типа [Long].
+ * @param populationDensity Плотность населения типа положительный [Float].
+ * @param governon Губернатор города типа [Human].
+ * @param climate Климат города типа [Climate], может быть null.
+ * @param government Правительство типа [Government], может быть null.
+ *
+ * @property id Уникальный номер города типа положительный [Long].
+ * @property creationDate Дата создания города типа [LocalDate].
+ *
+ * @constructor Принимает все параметры, описанные выше, создавая полноценный объект.
+ *
+ * @since 1.0
  */
 @Serializable
 class City(

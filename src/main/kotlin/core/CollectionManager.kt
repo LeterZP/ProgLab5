@@ -8,6 +8,19 @@ import io.FileWriter
 import java.util.Stack
 import java.time.LocalTime
 
+/**
+ * Класс для управления коллекцией, содержащей элементы типа [City].
+ *
+ * @param filepath Путь файла сохранения типа [String], в котором содержится или куда будет сохранена коллекция.
+ *
+ * @property initializationTime Время инициализации коллекции типа [LocalTime].
+ * @property size Количество элементов коллекции типа [Int].
+ *
+ * @constructor Принимает все указанные выше параметры, создавая готовый к использованию объект
+ *              и сразу загружая элементы из файла.
+ *
+ * @since 1.0
+ */
 class CollectionManager(private val filepath: String) {
     private var collection: Stack<City> = Stack<City>()
     val initializationTime: LocalTime = LocalTime.now()
@@ -18,20 +31,43 @@ class CollectionManager(private val filepath: String) {
         collection = reader.readFile()
     }
 
+    /**
+     * Сохраняет хранящиеся в коллекции объекты в файл.
+     *
+     * @throws [java.io.IOException] В случае ошибки доступа к файлу.
+     *
+     * @since 1.0
+     */
     fun saveToFile() {
         val writer: FileWriter = FileWriter(filepath)
         writer.writeToFile(collection)
     }
 
+    /**
+     * Сортирует элементы коллекции.
+     *
+     * @since 1.0
+     */
     fun sortElements() {
         collection.sort()
     }
 
+    /**
+     * Добавляет элемент в коллекцию.
+     *
+     * @param city Город типа [City], который нужно добавить в коллекцию.
+     *
+     * @since 1.0
+     */
     fun addElement(city: City) {
         collection.push(city)
-        sortElements()
     }
 
+    /**
+     * Переворачивает коллекцию.
+     *
+     * @since 1.0
+     */
     fun reorderElements() {
         val newCollection: Stack<City> = Stack<City>()
         while (!collection.isEmpty()) {
@@ -40,6 +76,15 @@ class CollectionManager(private val filepath: String) {
         collection = newCollection
     }
 
+    /**
+     * Считает количество элементов коллекции, высота над уровнем моря которого выше заданного.
+     *
+     * @param metersAboveSeaLevel Высота над уровнем моря типа [Long].
+     *
+     * @return Количество элементов коллекции, подходящих по условию, типа [Int].
+     *
+     * @since 1.0
+     */
     fun countHigherThen(metersAboveSeaLevel: Long): Int {
         var count: Int = 0
         for (element in collection) {
@@ -50,6 +95,17 @@ class CollectionManager(private val filepath: String) {
         return count
     }
 
+    /**
+     * Выдаёт элемент из коллекции по [id][City.id].
+     *
+     * @param id [id][City.id] города [City].
+     *
+     * @return Элемент коллекции типа [City].
+     *
+     * @throws CollectionHasNoElementException В случае, если в коллекции нет элемента с таким [id].
+     *
+     * @since 1.0
+     */
     fun getElement(id: Long): City {
         if (collection.empty()) throw CollectionHasNoElementException(id)
         var element: City? = null
@@ -59,6 +115,13 @@ class CollectionManager(private val filepath: String) {
         return element?: throw CollectionHasNoElementException(id)
     }
 
+    /**
+     * Выдаёт все элементы коллекции в строковом представлении.
+     *
+     * @return Все элементы коллекции типа [String].
+     *
+     * @since 1.0
+     */
     fun getAllElementsToString(): String {
         var result: String = ""
         for (element in collection) {
@@ -68,6 +131,13 @@ class CollectionManager(private val filepath: String) {
         return result
     }
 
+    /**
+     * Выдаёт все виды правительств элементов коллекции в сортированном виде.
+     *
+     * @return [ArrayList], содержащий все виды правительств типа [Government].
+     *
+     * @since 1.0
+     */
     fun getSortedGovernments(): ArrayList<Government> {
         val governments: ArrayList<Government> = ArrayList()
         collection.sortWith(Comparator { city1, city2 -> compareValues(city1.government, city2.government) })
@@ -78,6 +148,13 @@ class CollectionManager(private val filepath: String) {
         return governments
     }
 
+    /**
+     * Выдаёт сгруппированные имена всех городов и количество городов с одинаковым именем.
+     *
+     * @return [HashMap] с парами элементов имя типа [String] и количество типа [Int].
+     *
+     * @since 1.0
+     */
     fun groupElements(): HashMap<String, Int> {
         val names: HashMap<String, Int> = HashMap()
         for (element in collection) {
@@ -87,25 +164,56 @@ class CollectionManager(private val filepath: String) {
         return names
     }
 
+    /**
+     * Удаляет элемент из коллекции по [id][City.id].
+     *
+     * @param id [id][City.id] города [City].
+     *
+     * @throws CollectionHasNoElementException В случае, если в коллекции нет элемента с таким [id].
+     *
+     * @since 1.0
+     */
     fun removeElement(id: Long) {
         if (!collection.remove(this.getElement(id))) throw CollectionHasNoElementException(id)
     }
 
+    /**
+     * Удаляет последний элемент коллекции.
+     *
+     * @throws CollectionHasNoElementException В случае, если коллекция пуста.
+     *
+     * @since 1.0
+     */
     fun removeLast() {
         if (collection.empty()) throw CollectionHasNoElementException(-1)
         collection.remove(collection.last())
     }
 
+    /**
+     * Удаляет элементы, [id][City.id] которых больше заданного.
+     *
+     * @param id [id][City.id] города [City].
+     *
+     * @return Количество типа [Int] удалённых элементов.
+     *
+     * @since 1.0
+     */
     fun removeGreater(id: Long): Int {
         var count: Int = 0
-        collection.sort()
-        while (true) {
+        sortElements()
+        while (!collection.isEmpty()) {
             val element: City = collection.peek()
-            if (element.id <= id) return count
+            if (element.id <= id) break
             collection.pop()
             count++
         }
+        return count
     }
 
+    /**
+     * Удаляет все элементы коллекции.
+     *
+     * @since 1.0
+     */
     fun clearCollection() { collection.clear() }
 }
