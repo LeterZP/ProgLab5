@@ -1,8 +1,16 @@
 package commands
 
 import core.CommandInvoker
-import exceptions.InvalidElementValueException
 
+/**
+ * Команда для удаления элементов с [id][elements.City.id] выше заданного.
+ *
+ * @param ci [CommandInvoker], который вызывает команду.
+ *
+ * @constructor Вызывает родительский конструктор класса [Command].
+ *
+ * @since 1.0
+ */
 class RemoveGreaterCommand(ci: CommandInvoker): Command(ci){
     override val tokenAmount: Int = 1
 
@@ -12,7 +20,7 @@ class RemoveGreaterCommand(ci: CommandInvoker): Command(ci){
             val count: Int = ci.cm.removeGreater(token[0].toLong())
             println("Удалено $count элементов.")
         } catch (e: NumberFormatException) {
-            throw InvalidElementValueException(token[0])
+            println("${token[0]} не является id элемента.")
         }
     }
 

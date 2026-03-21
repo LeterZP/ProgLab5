@@ -6,6 +6,19 @@ import exceptions.InvalidAmountOfArgumentsException
 import exceptions.NoNextCommandException
 import java.util.Stack
 
+/**
+ * Класс вызова команд.
+ *
+ * Позволяет вызывать инициализированные в нём команды для работы с коллекцией посредством [CollectionManager].
+ *
+ * @param cm [CollectionManager], управляющий коллекцией.
+ *
+ * @property commands [HashMap] команд, содержащий имя команды типа [String] и саму команду типа [Command].
+ *
+ * @constructor Принимает все описанные выше параметры, создавая объект, уже содержащий в себе стандартный набор команд.
+ *
+ * @since 1.0
+ */
 class CommandInvoker(val cm: CollectionManager) {
     val commands: HashMap<String, Command> = HashMap()
     private val nextToken: Stack<String> = Stack<String>()
@@ -29,11 +42,23 @@ class CommandInvoker(val cm: CollectionManager) {
         initializeCommand(PrintFieldAscendingGovernmentCommand(this))
     }
 
+    /**
+     * Инициализирует команду, добавляя её в список возможных к использованию.
+     *
+     * @param command Команда для инициализации, типа [Command].
+     *
+     * @since 1.0
+     */
     fun initializeCommand(command: Command) {
         val name: String = command.getName()
         commands[name] = command
     }
 
+    /**
+     * Вызывает команду, читая её либо из очереди команд, либо из консоли в случае, если очередь пуста.
+     *
+     * @since 1.0
+     */
     fun readCommand() {
         do {
             try {
@@ -53,6 +78,15 @@ class CommandInvoker(val cm: CollectionManager) {
         } while (!nextToken.isEmpty())
     }
 
+    /**
+     * Читает первую в очереди команду.
+     *
+     * @return Команду с аргументами типа [String].
+     *
+     * @throws NoNextCommandException В случае, если очередь из команд пуста.
+     *
+     * @since 1.0
+     */
     fun readNext(): String {
         val result: String
         if (nextToken.isEmpty()) throw NoNextCommandException()
@@ -63,6 +97,13 @@ class CommandInvoker(val cm: CollectionManager) {
         return result
     }
 
+    /**
+     * Добавляет одну или несколько команд в очередь.
+     *
+     * @param instructions Одна или несколько команд с аргументами типа [String].
+     *
+     * @since 1.0
+     */
     fun addNext(instructions: String) {
         val values: List<String> = instructions.split("\n").reversed()
         for (instruction in values) {

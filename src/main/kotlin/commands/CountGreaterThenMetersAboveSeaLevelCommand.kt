@@ -1,8 +1,16 @@
 package commands
 
 import core.CommandInvoker
-import exceptions.InvalidElementValueException
 
+/**
+ * Команда для вывода количества элементов коллекции, высота над уровнем моря которых больше заданного.
+ *
+ * @param ci [CommandInvoker], который вызывает команду.
+ *
+ * @constructor Вызывает родительский конструктор класса [Command].
+ *
+ * @since 1.0
+ */
 class CountGreaterThenMetersAboveSeaLevelCommand(ci: CommandInvoker): Command(ci) {
     override val tokenAmount: Int = 1
 
@@ -11,7 +19,7 @@ class CountGreaterThenMetersAboveSeaLevelCommand(ci: CommandInvoker): Command(ci
         try {
             println("Количество: " + ci.cm.countHigherThen(token[0].toLong()))
         } catch (e: NumberFormatException) {
-            throw InvalidElementValueException(token[0])
+            println("Невозможно сравнить с данным значением, оно должно быть типа Long.")
         }
     }
 

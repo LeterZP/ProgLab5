@@ -5,6 +5,15 @@ import elements.CityBuilder
 import exceptions.InvalidElementValueException
 import exceptions.NoNextCommandException
 
+/**
+ * Команда для добавления элемента в коллекцию.
+ *
+ * @param ci [CommandInvoker], который вызывает команду.
+ *
+ * @constructor Вызывает родительский конструктор класса [Command].
+ *
+ * @since 1.0
+ */
 class AddCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)

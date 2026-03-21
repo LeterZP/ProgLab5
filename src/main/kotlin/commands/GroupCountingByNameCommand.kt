@@ -2,6 +2,15 @@ package commands
 
 import core.CommandInvoker
 
+/**
+ * Команда для группировки по имени с подсчётом повторений.
+ *
+ * @param ci [CommandInvoker], который вызывает команду.
+ *
+ * @constructor Вызывает родительский конструктор класса [Command].
+ *
+ * @since 1.0
+ */
 class GroupCountingByNameCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)

@@ -1,9 +1,17 @@
 package commands
 
 import core.CommandInvoker
-import exceptions.NoNextCommandException
 import io.ScriptReader
 
+/**
+ * Команда для исполнения скрипта.
+ *
+ * @param ci [CommandInvoker], который вызывает команду.
+ *
+ * @constructor Вызывает родительский конструктор класса [Command].
+ *
+ * @since 1.0
+ */
 class ExecuteScriptCommand(ci: CommandInvoker): Command(ci) {
     override val tokenAmount: Int = 1
 

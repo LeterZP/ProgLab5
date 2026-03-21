@@ -64,7 +64,7 @@ class City(
     @Contextual
     val creationDate: LocalDate = LocalDate.now()
 
-    private companion object { private var counter: Long = 1 }
+    companion object { private var counter: Long = 1 }
 
     init{ counter++ }
 
