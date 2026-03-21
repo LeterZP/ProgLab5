@@ -15,9 +15,9 @@ class GroupCountingByNameCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)
         val names: HashMap<String, Int> = ci.cm.groupElements()
-        println("Названия городов:")
+        ci.printInCommandInvoker("Названия городов:" + "\n")
         for (name in names) {
-            println("  --" + name.key + ": " + name.value)
+            ci.printInCommandInvoker("  --" + name.key + ": " + name.value + "\n")
         }
     }
 

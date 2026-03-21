@@ -17,9 +17,9 @@ class SaveCommand(ci: CommandInvoker): Command(ci) {
         super.execute(token)
         try {
             ci.cm.saveToFile()
-            println("Коллекция успешно сохранена.")
+            ci.printInCommandInvoker("Коллекция успешно сохранена.\n")
         } catch (e: IOException) {
-            println("Файл сохранения не найден. Коллекция не сохранена.")
+            ci.printInCommandInvoker("Файл сохранения не найден. Коллекция не сохранена.\n")
         }
     }
 

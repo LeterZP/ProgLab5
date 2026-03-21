@@ -20,10 +20,10 @@ class InfoCommand(ci: CommandInvoker): Command(ci) {
         super.execute(token)
         val time = ci.cm.initializationTime
         val size = ci.cm.size
-        println("Информация о коллекции:")
-        println("  --Тип коллекции: java.util.Stack")
-        println("  --Дата инициализации коллекции: $time")
-        println("  --Количество элементов в коллекции: $size")
+        ci.printInCommandInvoker("Информация о коллекции:" + "\n")
+        ci.printInCommandInvoker("  --Тип коллекции: java.util.Stack" + "\n")
+        ci.printInCommandInvoker("  --Дата инициализации коллекции: $time\n")
+        ci.printInCommandInvoker("  --Количество элементов в коллекции: $size\n")
     }
 
     override fun getName(): String {

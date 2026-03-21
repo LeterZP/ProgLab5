@@ -45,19 +45,19 @@ class HelpCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         try {
             if (token.isEmpty()) {
-                println("Список доступных команд:")
+                ci.printInCommandInvoker("Список доступных команд:" + "\n")
                 for (command in ci.commands.values) {
-                    println(getInfo(command))
+                    ci.printInCommandInvoker(getInfo(command) + "\n")
                 }
             } else if (token.size == 1) {
                 if (token[0] in ci.commands.keys) {
-                    println(getFullInfo(ci.commands.get(token[0])!!))
+                    ci.printInCommandInvoker(getFullInfo(ci.commands.get(token[0])!!) + "\n")
                 } else {
                     throw CommandNotFoundException(token[0])
                 }
             } else throw InvalidAmountOfArgumentsException(this, token.size)
         } catch (e: CommandNotFoundException) {
-            println(e.message)
+            ci.printInCommandInvoker(e.message + "\n")
         }
     }
 

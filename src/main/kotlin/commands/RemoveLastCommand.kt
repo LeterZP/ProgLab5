@@ -17,9 +17,9 @@ class RemoveLastCommand(ci: CommandInvoker): Command(ci) {
         super.execute(token)
         try {
             ci.cm.removeLast()
-            println("Элемент успешно удалён.")
+            ci.printInCommandInvoker("Элемент успешно удалён.\n")
         } catch (e: CollectionHasNoElementException) {
-            println("Последний элемент не найден: коллекция пуста.")
+            ci.printInCommandInvoker("Последний элемент не найден: коллекция пуста.\n")
         }
     }
 

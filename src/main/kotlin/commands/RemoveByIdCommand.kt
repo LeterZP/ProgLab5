@@ -20,9 +20,9 @@ class RemoveByIdCommand(ci: CommandInvoker): Command(ci) {
         try {
             value = token[0].toLong()
             ci.cm.removeElement(value)
-            println("Элемент $value успешно удалён.")
+            ci.printInCommandInvoker("Элемент $value успешно удалён.\n")
         }
-        catch (e: NumberFormatException) { println("${token[0]} не является id элемента.") }
+        catch (e: NumberFormatException) { ci.printInCommandInvoker("${token[0]} не является id элемента.\n") }
     }
 
     override fun describe(): String {

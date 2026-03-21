@@ -24,15 +24,15 @@ class InteractiveMode(private val cm: CollectionManager) {
     private fun interaction() {
         try {
             while (true) {
-                print("=> ")
+                ci.printInCommandInvoker("=> ")
                 ci.readCommand()
             }
         } catch (e: ProgramExitException) {
-            println(e.message)
+            ci.printInCommandInvoker(e.message + "\n")
             return
         } catch (e: Exception) {
-            println("Возникла непредвиденная ошибка: " + e.message)
-            println("Экстренное завершение работы")
+            ci.printInCommandInvoker("Возникла непредвиденная ошибка: " + e.message + "\n")
+            ci.printInCommandInvoker("Экстренное завершение работы.\n")
         }
     }
 
@@ -42,7 +42,7 @@ class InteractiveMode(private val cm: CollectionManager) {
      * @since 1.0
      */
     fun start() {
-        println("Программа запущена в интерактивном режиме. Чтобы увидеть список команд, введите help")
+        ci.printInCommandInvoker("Программа запущена в интерактивном режиме. Чтобы увидеть список команд, введите help.\n")
         interaction()
     }
 }

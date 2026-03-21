@@ -25,9 +25,9 @@ class UpdateCommand(ci: CommandInvoker): Command(ci) {
             val creator: CityBuilder = CityBuilder()
             var count: Int = 0
             while (true) {
-                print("Введите ")
-                print(creator.getField(count))
-                print(": ")
+                ci.printInCommandInvoker("Введите ")
+                ci.printInCommandInvoker(creator.getField(count))
+                ci.printInCommandInvoker(": ")
                 val value: String = try {
                     ci.readNext()
                 } catch (_: NoNextCommandException) {
@@ -38,14 +38,14 @@ class UpdateCommand(ci: CommandInvoker): Command(ci) {
                     if (count == creator.size-1) break
                     count++
                 } catch (_: InvalidElementValueException) {
-                    println("Значение $value не может быть установлено. Повторите ввод.")
+                    ci.printInCommandInvoker("Значение $value не может быть установлено. Повторите ввод.\n")
                 }
             }
             creator.update(ci.cm.getElement(id))
-            println("Элемент успешно обновлён")
+            ci.printInCommandInvoker("Элемент успешно обновлён.\n")
         }
-        catch (_: NumberFormatException) { println("${token[0]} не является id элемента.") }
-        catch (e: InvalidElementValueException) { println(e.message) }
+        catch (_: NumberFormatException) { ci.printInCommandInvoker("${token[0]} не является id элемента.\n") }
+        catch (e: InvalidElementValueException) { ci.printInCommandInvoker(e.message + "\n") }
     }
 
     override fun describe(): String {

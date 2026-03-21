@@ -15,8 +15,8 @@ class ShowCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)
         val output: String = ci.cm.getAllElementsToString()
-        if (output != "") println(output)
-        else println("Коллекция пуста.")
+        if (output != "") ci.printInCommandInvoker(output + "\n")
+        else ci.printInCommandInvoker("Коллекция пуста.\n")
     }
 
     override fun describe(): String {

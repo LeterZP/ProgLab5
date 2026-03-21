@@ -20,14 +20,14 @@ class AddCommand(ci: CommandInvoker): Command(ci) {
         val creator: CityBuilder = CityBuilder()
         var count: Int = 0
         while (true) {
-            print("Введите ")
-            print(creator.getField(count))
-            print(": ")
+            ci.printInCommandInvoker("Введите ")
+            ci.printInCommandInvoker(creator.getField(count))
+            ci.printInCommandInvoker(": ")
             val value: String = try { ci.readNext() } catch (e: NoNextCommandException) { readln() }
             try {
                 creator.setField(value, count)
             } catch (e: InvalidElementValueException) {
-                println(e.message)
+                ci.printInCommandInvoker(e.message + "\n")
                 continue
             }
             if (count == creator.size-1) break
@@ -35,9 +35,9 @@ class AddCommand(ci: CommandInvoker): Command(ci) {
         }
         try {
             ci.cm.addElement(creator.create())
-            println("Элемент успешно добавлен.")
+            ci.printInCommandInvoker("Элемент успешно добавлен." + "\n")
         } catch (e: InvalidElementValueException) {
-            println(e.message)
+            ci.printInCommandInvoker(e.message + "\n")
         }
     }
 

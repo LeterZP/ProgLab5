@@ -71,9 +71,9 @@ class CommandInvoker(val cm: CollectionManager) {
                 commands.get(instruction[0])?.execute(instruction.minus(instruction[0]))
                     ?: throw CommandNotFoundException(instruction[0])
             } catch (e: CommandNotFoundException) {
-                println(e.message)
+                printInCommandInvoker(e.message + "\n")
             } catch (e: InvalidAmountOfArgumentsException) {
-                println(e.message)
+                printInCommandInvoker(e.message + "\n")
             }
         } while (!nextToken.isEmpty())
     }
@@ -108,5 +108,9 @@ class CommandInvoker(val cm: CollectionManager) {
         for (instruction in values) {
             nextToken.push(instruction)
         }
+    }
+
+    fun printInCommandInvoker(value: String) {
+        printInCommandInvoker(value + "\n")
     }
 }

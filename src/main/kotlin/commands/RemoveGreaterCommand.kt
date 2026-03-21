@@ -18,9 +18,9 @@ class RemoveGreaterCommand(ci: CommandInvoker): Command(ci){
         super.execute(token)
         try {
             val count: Int = ci.cm.removeGreater(token[0].toLong())
-            println("Удалено $count элементов.")
+            ci.printInCommandInvoker("Удалено $count элементов.\n")
         } catch (e: NumberFormatException) {
-            println("${token[0]} не является id элемента.")
+            ci.printInCommandInvoker("${token[0]} не является id элемента.\n")
         }
     }
 

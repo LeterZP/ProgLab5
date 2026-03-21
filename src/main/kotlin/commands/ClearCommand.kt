@@ -15,7 +15,7 @@ class ClearCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)
         ci.cm.clearCollection()
-        println("Коллекция отчищена.")
+        ci.printInCommandInvoker("Коллекция отчищена." + "\n")
     }
 
     override fun describe(): String {

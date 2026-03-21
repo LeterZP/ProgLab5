@@ -17,9 +17,10 @@ class CountGreaterThenMetersAboveSeaLevelCommand(ci: CommandInvoker): Command(ci
     override fun execute(token: List<String>) {
         super.execute(token)
         try {
-            println("Количество: " + ci.cm.countHigherThen(token[0].toLong()))
+            ci.printInCommandInvoker("Количество: "
+                    + ci.cm.countHigherThen(token[0].toLong()) + "\n")
         } catch (e: NumberFormatException) {
-            println("Невозможно сравнить с данным значением, оно должно быть типа Long.")
+            ci.printInCommandInvoker("Невозможно сравнить с данным значением, оно должно быть типа Long." + "\n")
         }
     }
 

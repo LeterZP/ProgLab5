@@ -17,7 +17,7 @@ class PrintFieldAscendingGovernmentCommand(ci: CommandInvoker): Command(ci) {
         super.execute(token)
         val governments: ArrayList<Government> = ci.cm.getSortedGovernments()
         for (element in governments) {
-            println(element)
+            ci.printInCommandInvoker(element.toString() + "\n")
         }
     }
 
