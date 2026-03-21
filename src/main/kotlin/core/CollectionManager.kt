@@ -24,11 +24,12 @@ import java.time.LocalTime
 class CollectionManager(private val filepath: String) {
     private var collection: Stack<City> = Stack<City>()
     val initializationTime: LocalTime = LocalTime.now()
-    val size: Int = collection.size
+    var size: Int = 0
 
     init {
         val reader: FileReader = FileReader(filepath)
         collection = reader.readFile()
+        size = collection.size
     }
 
     /**
@@ -61,6 +62,7 @@ class CollectionManager(private val filepath: String) {
      */
     fun addElement(city: City) {
         collection.push(city)
+        size++
     }
 
     /**
@@ -175,6 +177,7 @@ class CollectionManager(private val filepath: String) {
      */
     fun removeElement(id: Long) {
         if (!collection.remove(this.getElement(id))) throw CollectionHasNoElementException(id)
+        size--
     }
 
     /**
@@ -187,6 +190,7 @@ class CollectionManager(private val filepath: String) {
     fun removeLast() {
         if (collection.empty()) throw CollectionHasNoElementException(-1)
         collection.remove(collection.last())
+        size--
     }
 
     /**
@@ -207,6 +211,7 @@ class CollectionManager(private val filepath: String) {
             collection.pop()
             count++
         }
+        size -= count
         return count
     }
 
@@ -215,5 +220,8 @@ class CollectionManager(private val filepath: String) {
      *
      * @since 1.0
      */
-    fun clearCollection() { collection.clear() }
+    fun clearCollection() {
+        collection.clear()
+        size = 0
+    }
 }

@@ -66,7 +66,11 @@ class City(
 
     companion object { private var counter: Long = 1 }
 
-    init{ counter++ }
+    init{
+        if (id > counter) {
+            counter = id + 1
+        }
+    }
 
     override fun compareTo(other: City): Int {
         return this.id.compareTo(other.id)

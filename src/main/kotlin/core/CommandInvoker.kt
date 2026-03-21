@@ -91,8 +91,7 @@ class CommandInvoker(val cm: CollectionManager) {
         val result: String
         if (nextToken.isEmpty()) throw NoNextCommandException()
         else {
-            result = nextToken.first()
-            nextToken.remove(result)
+            result = nextToken.pop()
         }
         return result
     }
@@ -105,7 +104,7 @@ class CommandInvoker(val cm: CollectionManager) {
      * @since 1.0
      */
     fun addNext(instructions: String) {
-        val values: List<String> = instructions.split("\n").reversed()
+        val values: List<String> = instructions.lines().reversed()
         for (instruction in values) {
             nextToken.push(instruction)
         }
