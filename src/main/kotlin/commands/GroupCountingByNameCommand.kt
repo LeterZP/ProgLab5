@@ -1,23 +1,25 @@
 package commands
 
-import core.CommandInvoker
+import core.CollectionManager
+import io.IOManager
 
 /**
  * Команда для группировки по имени с подсчётом повторений.
  *
- * @param ci [CommandInvoker], который вызывает команду.
+ * @param io [IOManager] для [Command].
+ * @param cm [CollectionManager] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class GroupCountingByNameCommand(ci: CommandInvoker): Command(ci) {
+class GroupCountingByNameCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
     override fun execute(token: List<String>) {
         super.execute(token)
-        val names: HashMap<String, Int> = ci.cm.groupElements()
-        ci.printInCommandInvoker("Названия городов:" + "\n")
+        val names: HashMap<String, Int> = cm.groupElements()
+        io.write("Названия городов:" + "\n")
         for (name in names) {
-            ci.printInCommandInvoker("  --" + name.key + ": " + name.value + "\n")
+            io.write("  --" + name.key + ": " + name.value + "\n")
         }
     }
 

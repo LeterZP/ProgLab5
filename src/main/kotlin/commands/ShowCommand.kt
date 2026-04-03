@@ -1,22 +1,24 @@
 package commands
 
-import core.CommandInvoker
+import core.CollectionManager
+import io.IOManager
 
 /**
  * Команда для получения информации об элементах коллекции.
  *
- * @param ci [CommandInvoker], который вызывает команду.
+ * @param io [IOManager] для [Command].
+ * @param cm [CollectionManager] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class ShowCommand(ci: CommandInvoker): Command(ci) {
+class ShowCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
     override fun execute(token: List<String>) {
         super.execute(token)
-        val output: String = ci.cm.getAllElementsToString()
-        if (output != "") ci.printInCommandInvoker(output + "\n")
-        else ci.printInCommandInvoker("Коллекция пуста.\n")
+        val output: String = cm.getAllElementsToString()
+        if (output != "") io.write(output + "\n")
+        else io.write("Коллекция пуста.\n")
     }
 
     override fun describe(): String {

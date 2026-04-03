@@ -1,23 +1,25 @@
 package commands
 
-import core.CommandInvoker
+import core.CollectionManager
 import elements.Government
+import io.IOManager
 
 /**
  * Команда для получения всех свойств вида [Government] в сортированном виде.
  *
- * @param ci [CommandInvoker], который вызывает команду.
+ * @param io [IOManager] для [Command].
+ * @param cm [CollectionManager] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class PrintFieldAscendingGovernmentCommand(ci: CommandInvoker): Command(ci) {
+class PrintFieldAscendingGovernmentCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
     override fun execute(token: List<String>) {
         super.execute(token)
-        val governments: ArrayList<Government> = ci.cm.getSortedGovernments()
+        val governments: MutableList<Government?> = cm.getSortedGovernments()
         for (element in governments) {
-            ci.printInCommandInvoker(element.toString() + "\n")
+            io.write(element.toString() + "\n")
         }
     }
 

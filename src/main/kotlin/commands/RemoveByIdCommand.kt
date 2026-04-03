@@ -1,17 +1,19 @@
 package commands
 
-import core.CommandInvoker
+import core.CollectionManager
+import io.IOManager
 
 /**
  * Команда для удаления элемента по id.
  *
- * @param ci [CommandInvoker], который вызывает команду.
+ * @param io [IOManager] для [Command].
+ * @param cm [CollectionManager] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class RemoveByIdCommand(ci: CommandInvoker): Command(ci) {
+class RemoveByIdCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
     override val tokenAmount: Int = 1
 
     override fun execute(token: List<String>) {
@@ -19,10 +21,10 @@ class RemoveByIdCommand(ci: CommandInvoker): Command(ci) {
         var value: Long
         try {
             value = token[0].toLong()
-            ci.cm.removeElement(value)
-            ci.printInCommandInvoker("Элемент $value успешно удалён.\n")
+            cm.removeElement(value)
+            io.write("Элемент $value успешно удалён.\n")
         }
-        catch (e: NumberFormatException) { ci.printInCommandInvoker("${token[0]} не является id элемента.\n") }
+        catch (e: NumberFormatException) { io.write("${token[0]} не является id элемента.\n") }
     }
 
     override fun describe(): String {

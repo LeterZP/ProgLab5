@@ -3,33 +3,43 @@ package core
 import elements.City
 import elements.Government
 import exceptions.CollectionHasNoElementException
-import io.FileReader
-import io.FileWriter
+import io.IOManager
 import java.util.Stack
 import java.time.LocalTime
 
 /**
  * Класс для управления коллекцией, содержащей элементы типа [City].
  *
- * @param filepath Путь файла сохранения типа [String], в котором содержится или куда будет сохранена коллекция.
+ * @param io [IOManager], с которым взаимодействует коллекция.
  *
  * @property initializationTime Время инициализации коллекции типа [LocalTime].
- * @property size Количество элементов коллекции типа [Int].
  *
  * @constructor Принимает все указанные выше параметры, создавая готовый к использованию объект
  *              и сразу загружая элементы из файла.
  *
  * @since 1.0
  */
-class CollectionManager(private val filepath: String) {
+class CollectionManager(private val io: IOManager) {
+    private val save: String = System.getenv("SAVE_FILE") ?: "save.json"
     private var collection: Stack<City> = Stack<City>()
     val initializationTime: LocalTime = LocalTime.now()
-    var size: Int = 0
 
     init {
-        val reader: FileReader = FileReader(filepath)
-        collection = reader.readFile()
-        size = collection.size
+        val previousSource = io.source
+        io.source = save
+        collection = io.readAsJsonFile()
+        io.source = previousSource
+    }
+
+    /**
+     * Считает количество элементов коллекции.
+     *
+     * @return Количество элементов коллекции типа [Int].
+     *
+     * @since 1.0
+     */
+    fun size(): Int {
+        return collection.size
     }
 
     /**
@@ -40,8 +50,10 @@ class CollectionManager(private val filepath: String) {
      * @since 1.0
      */
     fun saveToFile() {
-        val writer: FileWriter = FileWriter(filepath)
-        writer.writeToFile(collection)
+        val previousSource: String? = io.source
+        io.source = save
+        io.writeToJsonFile(collection)
+        io.source = previousSource
     }
 
     /**
@@ -62,7 +74,6 @@ class CollectionManager(private val filepath: String) {
      */
     fun addElement(city: City) {
         collection.push(city)
-        size++
     }
 
     /**
@@ -140,11 +151,11 @@ class CollectionManager(private val filepath: String) {
      *
      * @since 1.0
      */
-    fun getSortedGovernments(): ArrayList<Government> {
-        val governments: ArrayList<Government> = ArrayList()
+    fun getSortedGovernments(): MutableList<Government?> {
+        val governments: MutableList<Government?> = ArrayList()
         collection.sortWith(Comparator { city1, city2 -> compareValues(city1.government, city2.government) })
         for (element in collection) {
-            governments.plus(element.government)
+            governments.add(element.government)
         }
         sortElements()
         return governments
@@ -177,7 +188,6 @@ class CollectionManager(private val filepath: String) {
      */
     fun removeElement(id: Long) {
         if (!collection.remove(this.getElement(id))) throw CollectionHasNoElementException(id)
-        size--
     }
 
     /**
@@ -190,7 +200,6 @@ class CollectionManager(private val filepath: String) {
     fun removeLast() {
         if (collection.empty()) throw CollectionHasNoElementException(-1)
         collection.remove(collection.last())
-        size--
     }
 
     /**
@@ -211,7 +220,6 @@ class CollectionManager(private val filepath: String) {
             collection.pop()
             count++
         }
-        size -= count
         return count
     }
 
@@ -222,6 +230,5 @@ class CollectionManager(private val filepath: String) {
      */
     fun clearCollection() {
         collection.clear()
-        size = 0
     }
 }

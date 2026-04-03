@@ -1,9 +1,10 @@
 import core.CollectionManager
 import core.InteractiveMode
+import io.IOManager
 
 fun main() {
-    val save: String = System.getenv("SAVE_FILE") ?: "save.json"
-    val cm: CollectionManager = CollectionManager(save)
-    val im: InteractiveMode = InteractiveMode(cm)
+    val io: IOManager = IOManager()
+    val cm: CollectionManager = CollectionManager(io)
+    val im: InteractiveMode = InteractiveMode(cm, io)
     im.start()
 }

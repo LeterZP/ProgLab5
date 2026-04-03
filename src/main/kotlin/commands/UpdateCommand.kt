@@ -1,20 +1,21 @@
 package commands
 
-import core.CommandInvoker
+import core.CollectionManager
 import elements.CityBuilder
 import exceptions.InvalidElementValueException
-import exceptions.NoNextCommandException
+import io.IOManager
 
 /**
  * Команда для обновления элемента коллекции.
  *
- * @param ci [CommandInvoker], который вызывает команду.
+ * @param io [IOManager] для [Command].
+ * @param cm [CollectionManager] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class UpdateCommand(ci: CommandInvoker): Command(ci) {
+class UpdateCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
     override val tokenAmount: Int = 1
 
     override fun execute(token: List<String>) {
@@ -25,27 +26,20 @@ class UpdateCommand(ci: CommandInvoker): Command(ci) {
             val creator: CityBuilder = CityBuilder()
             var count: Int = 0
             while (true) {
-                ci.printInCommandInvoker("Введите ")
-                ci.printInCommandInvoker(creator.getField(count))
-                ci.printInCommandInvoker(": ")
-                val value: String = try {
-                    ci.readNext()
-                } catch (_: NoNextCommandException) {
-                    readln()
-                }
+                val value: String = io.askForValue(creator.getField(count))
                 try {
                     if (value != "") creator.setField(value, count)
                     if (count == creator.size-1) break
                     count++
                 } catch (_: InvalidElementValueException) {
-                    ci.printInCommandInvoker("Значение $value не может быть установлено. Повторите ввод.\n")
+                    io.write("Значение $value не может быть установлено. Повторите ввод.\n")
                 }
             }
-            creator.update(ci.cm.getElement(id))
-            ci.printInCommandInvoker("Элемент успешно обновлён.\n")
+            creator.update(cm.getElement(id))
+            io.write("Элемент успешно обновлён.\n")
         }
-        catch (_: NumberFormatException) { ci.printInCommandInvoker("${token[0]} не является id элемента.\n") }
-        catch (e: InvalidElementValueException) { ci.printInCommandInvoker(e.message + "\n") }
+        catch (_: NumberFormatException) { io.write("${token[0]} не является id элемента.\n") }
+        catch (e: InvalidElementValueException) { io.write(e.message + "\n") }
     }
 
     override fun describe(): String {

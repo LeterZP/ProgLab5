@@ -67,7 +67,7 @@ class City(
     companion object { private var counter: Long = 1 }
 
     init{
-        if (id > counter) {
+        if (id >= counter) {
             counter = id + 1
         }
     }

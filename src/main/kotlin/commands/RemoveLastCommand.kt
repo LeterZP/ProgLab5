@@ -1,25 +1,27 @@
 package commands
 
-import core.CommandInvoker
+import core.CollectionManager
 import exceptions.CollectionHasNoElementException
+import io.IOManager
 
 /**
  * Команда для удаления последнего элемента коллекции.
  *
- * @param ci [CommandInvoker], который вызывает команду.
+ * @param io [IOManager] для [Command].
+ * @param cm [CollectionManager] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class RemoveLastCommand(ci: CommandInvoker): Command(ci) {
+class RemoveLastCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
     override fun execute(token: List<String>) {
         super.execute(token)
         try {
-            ci.cm.removeLast()
-            ci.printInCommandInvoker("Элемент успешно удалён.\n")
+            cm.removeLast()
+            io.write("Элемент успешно удалён.\n")
         } catch (e: CollectionHasNoElementException) {
-            ci.printInCommandInvoker("Последний элемент не найден: коллекция пуста.\n")
+            io.write("Последний элемент не найден: коллекция пуста.\n")
         }
     }
 

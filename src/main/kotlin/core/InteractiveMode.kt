@@ -1,6 +1,7 @@
 package core
 
 import exceptions.*
+import io.IOManager
 
 /**
  * Класс интерактивного взаимодействия с программой.
@@ -13,8 +14,11 @@ import exceptions.*
  *
  * @since 1.0
  */
-class InteractiveMode(private val cm: CollectionManager) {
-    private val ci: CommandInvoker = CommandInvoker(cm)
+class InteractiveMode(
+    private val cm: CollectionManager,
+    private val io: IOManager
+) {
+    private val ci: CommandInvoker = CommandInvoker(io, cm)
 
     /**
      * Запускает взаимодействие с программой.
@@ -22,17 +26,19 @@ class InteractiveMode(private val cm: CollectionManager) {
      * @since 1.0
      */
     private fun interaction() {
+        var work: Boolean = true
         try {
-            while (true) {
-                ci.printInCommandInvoker("=> ")
+            while (work) {
+                io.write("=> ")
                 ci.readCommand()
             }
         } catch (e: ProgramExitException) {
-            ci.printInCommandInvoker(e.message + "\n")
-            return
+            io.write(e.message + "\n")
+            work = false
         } catch (e: Exception) {
-            ci.printInCommandInvoker("Возникла непредвиденная ошибка: " + e.message + "\n")
-            ci.printInCommandInvoker("Экстренное завершение работы.\n")
+            println(e.message)
+            io.write("Возникла непредвиденная ошибка: " + e.message + "\n")
+            io.write("Экстренное завершение работы.\n")
         }
     }
 
@@ -42,7 +48,7 @@ class InteractiveMode(private val cm: CollectionManager) {
      * @since 1.0
      */
     fun start() {
-        ci.printInCommandInvoker("Программа запущена в интерактивном режиме. Чтобы увидеть список команд, введите help.\n")
+        io.write("Программа запущена в интерактивном режиме. Чтобы увидеть список команд, введите help.\n")
         interaction()
     }
 }

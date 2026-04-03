@@ -1,24 +1,23 @@
 package commands
 
-import core.CommandInvoker
-import io.ScriptReader
+import core.CollectionManager
+import io.IOManager
 
 /**
  * Команда для исполнения скрипта.
  *
- * @param ci [CommandInvoker], который вызывает команду.
+ * @param io [IOManager] для [Command].
+ * @param cm [CollectionManager] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class ExecuteScriptCommand(ci: CommandInvoker): Command(ci) {
+class ExecuteScriptCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
     override val tokenAmount: Int = 1
 
     override fun execute(token: List<String>) {
         super.execute(token)
-        val reader: ScriptReader = ScriptReader(ci)
-        reader.startScript(token[0])
     }
 
     override fun describe(): String {

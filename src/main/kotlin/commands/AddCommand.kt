@@ -1,43 +1,41 @@
 package commands
 
-import core.CommandInvoker
+import core.CollectionManager
+import io.IOManager
 import elements.CityBuilder
 import exceptions.InvalidElementValueException
-import exceptions.NoNextCommandException
 
 /**
  * Команда для добавления элемента в коллекцию.
  *
- * @param ci [CommandInvoker], который вызывает команду.
+ * @param io [IOManager] для [Command].
+ * @param cm [CollectionManager] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class AddCommand(ci: CommandInvoker): Command(ci) {
+class AddCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
     override fun execute(token: List<String>) {
         super.execute(token)
         val creator: CityBuilder = CityBuilder()
         var count: Int = 0
         while (true) {
-            ci.printInCommandInvoker("Введите ")
-            ci.printInCommandInvoker(creator.getField(count))
-            ci.printInCommandInvoker(": ")
-            val value: String = try { ci.readNext() } catch (e: NoNextCommandException) { readln() }
+            val value: String = io.askForValue(creator.getField(count))
             try {
                 creator.setField(value, count)
             } catch (e: InvalidElementValueException) {
-                ci.printInCommandInvoker(e.message + "\n")
+                io.write(e.message + "\n")
                 continue
             }
             if (count == creator.size-1) break
             count++
         }
         try {
-            ci.cm.addElement(creator.create())
-            ci.printInCommandInvoker("Элемент успешно добавлен." + "\n")
+            cm.addElement(creator.create())
+            io.write("Элемент успешно добавлен." + "\n")
         } catch (e: InvalidElementValueException) {
-            ci.printInCommandInvoker(e.message + "\n")
+            io.write(e.message + "\n")
         }
     }
 

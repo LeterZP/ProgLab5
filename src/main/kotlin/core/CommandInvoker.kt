@@ -4,6 +4,7 @@ import commands.*
 import exceptions.CommandNotFoundException
 import exceptions.InvalidAmountOfArgumentsException
 import exceptions.NoNextCommandException
+import io.IOManager
 import java.util.Stack
 
 /**
@@ -11,6 +12,7 @@ import java.util.Stack
  *
  * Позволяет вызывать инициализированные в нём команды для работы с коллекцией посредством [CollectionManager].
  *
+ * @param io [IOManager], откуда читаются команды.
  * @param cm [CollectionManager], управляющий коллекцией.
  *
  * @property commands [HashMap] команд, содержащий имя команды типа [String] и саму команду типа [Command].
@@ -19,27 +21,27 @@ import java.util.Stack
  *
  * @since 1.0
  */
-class CommandInvoker(val cm: CollectionManager) {
+class CommandInvoker(val io: IOManager, val cm: CollectionManager) {
     val commands: HashMap<String, Command> = HashMap()
     private val nextToken: Stack<String> = Stack<String>()
 
     init {
-        initializeCommand(HelpCommand(this))
-        initializeCommand(InfoCommand(this))
-        initializeCommand(ShowCommand(this))
-        initializeCommand(AddCommand(this))
-        initializeCommand(UpdateCommand(this))
-        initializeCommand(RemoveByIdCommand(this))
-        initializeCommand(ClearCommand(this))
-        initializeCommand(SaveCommand(this))
-        initializeCommand(ExecuteScriptCommand(this))
-        initializeCommand(ExitCommand(this))
-        initializeCommand(RemoveLastCommand(this))
-        initializeCommand(RemoveGreaterCommand(this))
-        initializeCommand(ReorderCommand(this))
-        initializeCommand(GroupCountingByNameCommand(this))
-        initializeCommand(CountGreaterThenMetersAboveSeaLevelCommand(this))
-        initializeCommand(PrintFieldAscendingGovernmentCommand(this))
+        initializeCommand(HelpCommand(io, cm, this))
+        initializeCommand(InfoCommand(io, cm))
+        initializeCommand(ShowCommand(io, cm))
+        initializeCommand(AddCommand(io, cm))
+        initializeCommand(UpdateCommand(io, cm))
+        initializeCommand(RemoveByIdCommand(io, cm))
+        initializeCommand(ClearCommand(io, cm))
+        initializeCommand(SaveCommand(io, cm))
+        initializeCommand(ExecuteScriptCommand(io, cm))
+        initializeCommand(ExitCommand(io, cm))
+        initializeCommand(RemoveLastCommand(io, cm))
+        initializeCommand(RemoveGreaterCommand(io, cm))
+        initializeCommand(ReorderCommand(io, cm))
+        initializeCommand(GroupCountingByNameCommand(io, cm))
+        initializeCommand(CountGreaterThenMetersAboveSeaLevelCommand(io, cm))
+        initializeCommand(PrintFieldAscendingGovernmentCommand(io, cm))
     }
 
     /**
@@ -65,15 +67,15 @@ class CommandInvoker(val cm: CollectionManager) {
                 val instruction: List<String> = try {
                     readNext().split(" ")
                 } catch (e: NoNextCommandException) {
-                    readln().split(" ")
+                    io.read().split(" ")
                 }
                 if (instruction.size == 1 && instruction[0] == "") return
                 commands.get(instruction[0])?.execute(instruction.minus(instruction[0]))
                     ?: throw CommandNotFoundException(instruction[0])
             } catch (e: CommandNotFoundException) {
-                printInCommandInvoker(e.message + "\n")
+                io.write(e.message + "\n")
             } catch (e: InvalidAmountOfArgumentsException) {
-                printInCommandInvoker(e.message + "\n")
+                io.write(e.message + "\n")
             }
         } while (!nextToken.isEmpty())
     }
@@ -108,9 +110,5 @@ class CommandInvoker(val cm: CollectionManager) {
         for (instruction in values) {
             nextToken.push(instruction)
         }
-    }
-
-    fun printInCommandInvoker(value: String) {
-        printInCommandInvoker(value + "\n")
     }
 }
