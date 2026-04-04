@@ -2,6 +2,7 @@ package core
 
 import exceptions.*
 import io.IOManager
+import java.io.IOException
 
 /**
  * Класс интерактивного взаимодействия с программой.
@@ -27,18 +28,21 @@ class InteractiveMode(
      */
     private fun interaction() {
         var work: Boolean = true
-        try {
-            while (work) {
+        while (work) {
+            try {
                 io.write("=> ")
                 ci.readCommand()
+            } catch (e: ProgramExitException) {
+                io.write(e.message + "\n")
+                work = false
+            } catch (e: IOException) {
+                io.source = null
+                io.write("Ошибка чтения файла или записи в него.\n")
+            } catch (e: Exception) {
+                io.write("Возникла непредвиденная ошибка: " + e.message + "\n")
+                io.write("Экстренное завершение работы.\n")
+                work = false
             }
-        } catch (e: ProgramExitException) {
-            io.write(e.message + "\n")
-            work = false
-        } catch (e: Exception) {
-            println(e.message)
-            io.write("Возникла непредвиденная ошибка: " + e.message + "\n")
-            io.write("Экстренное завершение работы.\n")
         }
     }
 

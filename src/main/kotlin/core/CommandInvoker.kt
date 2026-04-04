@@ -66,9 +66,9 @@ class CommandInvoker(val io: IOManager, val cm: CollectionManager) {
         do {
             try {
                 val instruction: List<String> = try {
-                    readNext().split(" ")
+                    readNext().trim().split(" ")
                 } catch (e: NoNextCommandException) {
-                    io.read().split(" ")
+                    io.read().trim().split(" ")
                 }
                 if (instruction.size == 1 && instruction[0] == "") return
                 commands.get(instruction[0])?.execute(instruction.minus(instruction[0]))
@@ -116,6 +116,11 @@ class CommandInvoker(val io: IOManager, val cm: CollectionManager) {
         }
     }
 
+    /**
+     * Выбирает следующее значение для ввода.
+     *
+     * @see [IOManager.askForValue].
+     */
     fun nextValue(output: String): String {
         val input: String
         if (nextToken.isEmpty()) {

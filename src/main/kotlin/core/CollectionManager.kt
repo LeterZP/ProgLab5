@@ -4,8 +4,9 @@ import elements.City
 import elements.Government
 import exceptions.CollectionHasNoElementException
 import io.IOManager
+import java.io.IOException
 import java.util.Stack
-import java.time.LocalTime
+import java.time.LocalDate
 
 /**
  * Класс для управления коллекцией, содержащей элементы типа [City].
@@ -22,13 +23,20 @@ import java.time.LocalTime
 class CollectionManager(private val io: IOManager) {
     private val save: String = System.getenv("SAVE_FILE") ?: "save.json"
     private var collection: Stack<City> = Stack<City>()
-    val initializationTime: LocalTime = LocalTime.now()
+    val initializationTime: LocalDate = LocalDate.now()
 
     init {
         val previousSource = io.source
         io.source = save
-        collection = io.readAsJsonFile()
-        io.source = previousSource
+        try {
+            collection = io.readAsJsonFile()
+            io.source = previousSource
+        } catch (e: IOException) {
+            io.source = previousSource
+            io.write("Файл сохранения не найден.\n")
+        }
+
+
     }
 
     /**
