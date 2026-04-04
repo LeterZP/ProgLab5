@@ -1,21 +1,19 @@
 package commands
 
-import core.CollectionManager
+import core.CommandInvoker
 import elements.CityBuilder
 import exceptions.InvalidElementValueException
-import io.IOManager
 
 /**
  * Команда для обновления элемента коллекции.
  *
- * @param io [IOManager] для [Command].
- * @param cm [CollectionManager] для [Command].
+ * @param ci [CommandInvoker] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class UpdateCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
+class UpdateCommand(ci: CommandInvoker): Command(ci) {
     override val tokenAmount: Int = 1
 
     override fun execute(token: List<String>) {
@@ -26,20 +24,20 @@ class UpdateCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
             val creator: CityBuilder = CityBuilder()
             var count: Int = 0
             while (true) {
-                val value: String = io.askForValue(creator.getField(count))
+                val value: String = ci.nextValue(creator.getField(count))
                 try {
                     if (value != "") creator.setField(value, count)
                     if (count == creator.size-1) break
                     count++
                 } catch (_: InvalidElementValueException) {
-                    io.write("Значение $value не может быть установлено. Повторите ввод.\n")
+                    ci.io.write("Значение $value не может быть установлено. Повторите ввод.\n")
                 }
             }
-            creator.update(cm.getElement(id))
-            io.write("Элемент успешно обновлён.\n")
+            creator.update(ci.cm.getElement(id))
+            ci.io.write("Элемент успешно обновлён.\n")
         }
-        catch (_: NumberFormatException) { io.write("${token[0]} не является id элемента.\n") }
-        catch (e: InvalidElementValueException) { io.write(e.message + "\n") }
+        catch (_: NumberFormatException) { ci.io.write("${token[0]} не является id элемента.\n") }
+        catch (e: InvalidElementValueException) { ci.io.write(e.message + "\n") }
     }
 
     override fun describe(): String {

@@ -1,14 +1,12 @@
 package commands
 
-import core.CollectionManager
+import core.CommandInvoker
 import exceptions.ProgramExitException
-import io.IOManager
 
 /**
  * Команда для выхода из программы.
  *
- * @param io [IOManager] для [Command].
- * @param cm [CollectionManager] для [Command].
+ * @param ci [CommandInvoker] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
@@ -16,7 +14,7 @@ import io.IOManager
  *
  * @since 1.0
  */
-class ExitCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
+class ExitCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)
         throw ProgramExitException()

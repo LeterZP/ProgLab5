@@ -24,24 +24,25 @@ import java.util.Stack
 class CommandInvoker(val io: IOManager, val cm: CollectionManager) {
     val commands: HashMap<String, Command> = HashMap()
     private val nextToken: Stack<String> = Stack<String>()
+    val executionHistory = Stack<String>()
 
     init {
-        initializeCommand(HelpCommand(io, cm, this))
-        initializeCommand(InfoCommand(io, cm))
-        initializeCommand(ShowCommand(io, cm))
-        initializeCommand(AddCommand(io, cm))
-        initializeCommand(UpdateCommand(io, cm))
-        initializeCommand(RemoveByIdCommand(io, cm))
-        initializeCommand(ClearCommand(io, cm))
-        initializeCommand(SaveCommand(io, cm))
-        initializeCommand(ExecuteScriptCommand(io, cm))
-        initializeCommand(ExitCommand(io, cm))
-        initializeCommand(RemoveLastCommand(io, cm))
-        initializeCommand(RemoveGreaterCommand(io, cm))
-        initializeCommand(ReorderCommand(io, cm))
-        initializeCommand(GroupCountingByNameCommand(io, cm))
-        initializeCommand(CountGreaterThenMetersAboveSeaLevelCommand(io, cm))
-        initializeCommand(PrintFieldAscendingGovernmentCommand(io, cm))
+        initializeCommand(HelpCommand(this))
+        initializeCommand(InfoCommand(this))
+        initializeCommand(ShowCommand(this))
+        initializeCommand(AddCommand(this))
+        initializeCommand(UpdateCommand(this))
+        initializeCommand(RemoveByIdCommand(this))
+        initializeCommand(ClearCommand(this))
+        initializeCommand(SaveCommand(this))
+        initializeCommand(ExecuteScriptCommand(this))
+        initializeCommand(ExitCommand(this))
+        initializeCommand(RemoveLastCommand(this))
+        initializeCommand(RemoveGreaterCommand(this))
+        initializeCommand(ReorderCommand(this))
+        initializeCommand(GroupCountingByNameCommand(this))
+        initializeCommand(CountGreaterThenMetersAboveSeaLevelCommand(this))
+        initializeCommand(PrintFieldAscendingGovernmentCommand(this))
     }
 
     /**
@@ -91,7 +92,10 @@ class CommandInvoker(val io: IOManager, val cm: CollectionManager) {
      */
     fun readNext(): String {
         val result: String
-        if (nextToken.isEmpty()) throw NoNextCommandException()
+        if (nextToken.isEmpty()) {
+            executionHistory.clear()
+            throw NoNextCommandException()
+        }
         else {
             result = nextToken.pop()
         }
@@ -110,5 +114,15 @@ class CommandInvoker(val io: IOManager, val cm: CollectionManager) {
         for (instruction in values) {
             nextToken.push(instruction)
         }
+    }
+
+    fun nextValue(output: String): String {
+        val input: String
+        if (nextToken.isEmpty()) {
+            input = io.askForValue(output)
+        } else {
+            input =  nextToken.pop()
+        }
+        return input
     }
 }

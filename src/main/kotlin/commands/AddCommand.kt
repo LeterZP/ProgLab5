@@ -1,41 +1,39 @@
 package commands
 
-import core.CollectionManager
-import io.IOManager
+import core.CommandInvoker
 import elements.CityBuilder
 import exceptions.InvalidElementValueException
 
 /**
  * Команда для добавления элемента в коллекцию.
  *
- * @param io [IOManager] для [Command].
- * @param cm [CollectionManager] для [Command].
+ * @param ci [CommandInvoker] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class AddCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
+class AddCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)
         val creator: CityBuilder = CityBuilder()
         var count: Int = 0
         while (true) {
-            val value: String = io.askForValue(creator.getField(count))
+            val value: String = ci.nextValue(creator.getField(count))
             try {
                 creator.setField(value, count)
             } catch (e: InvalidElementValueException) {
-                io.write(e.message + "\n")
+                ci.io.write(e.message + "\n")
                 continue
             }
             if (count == creator.size-1) break
             count++
         }
         try {
-            cm.addElement(creator.create())
-            io.write("Элемент успешно добавлен." + "\n")
+            ci.cm.addElement(creator.create())
+            ci.io.write("Элемент успешно добавлен." + "\n")
         } catch (e: InvalidElementValueException) {
-            io.write(e.message + "\n")
+            ci.io.write(e.message + "\n")
         }
     }
 

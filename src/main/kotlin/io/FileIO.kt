@@ -12,31 +12,23 @@ import java.io.FileWriter
  *
  * @constructor Создаёт готовый к использованию объект, принимая все описанные выше параметры.
  *
- * @throws [java.io.IOException] В случае, если файла не существует.
- *
  * @since 1.0
  */
 class FileIO(private val file: String) {
-    private var fileContent: MutableList<String>
-
-    init {
-        val reader: BufferedInputStream = BufferedInputStream(FileInputStream(file))
-        val text = reader.readAllBytes().decodeToString()
-        fileContent = text.split("\n").asReversed().toMutableList()
-    }
 
     /**
-     * Читает одну строку файла.
+     * Читает весь файл.
      *
      * @return [String] строку файла.
      *
      * @throws [NoSuchElementException] В случае, если в файле не осталось непрочитанных строк.
+     * @throws [java.io.IOException] В случае, если файла не существует.
      *
      * @since 1.0
      */
-    fun readLine(): String {
-        return fileContent.removeLast()
-
+    fun readFile(): String {
+        val reader: BufferedInputStream = BufferedInputStream(FileInputStream(file))
+        return reader.readAllBytes().decodeToString()
     }
 
     /**

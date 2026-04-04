@@ -1,28 +1,26 @@
 package commands
 
-import core.CollectionManager
-import io.IOManager
+import core.CommandInvoker
 
 /**
  * Команда для вывода количества элементов коллекции, высота над уровнем моря которых больше заданного.
  *
- * @param io [IOManager] для [Command].
- * @param cm [CollectionManager] для [Command].
+ * @param ci [CommandInvoker] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class CountGreaterThenMetersAboveSeaLevelCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
+class CountGreaterThenMetersAboveSeaLevelCommand(ci: CommandInvoker): Command(ci) {
     override val tokenAmount: Int = 1
 
     override fun execute(token: List<String>) {
         super.execute(token)
         try {
-            io.write("Количество: "
-                    + cm.countHigherThen(token[0].toLong()) + "\n")
+            ci.io.write("Количество: "
+                    + ci.cm.countHigherThen(token[0].toLong()) + "\n")
         } catch (e: NumberFormatException) {
-            io.write("Невозможно сравнить с данным значением, оно должно быть типа Long." + "\n")
+            ci.io.write("Невозможно сравнить с данным значением, оно должно быть типа Long." + "\n")
         }
     }
 

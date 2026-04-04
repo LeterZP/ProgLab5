@@ -1,28 +1,26 @@
 package commands
 
-import core.CollectionManager
-import io.IOManager
+import core.CommandInvoker
 
 /**
  * Команда для удаления элементов с [id][elements.City.id] выше заданного.
  *
- * @param io [IOManager] для [Command].
- * @param cm [CollectionManager] для [Command].
+ * @param ci [CommandInvoker] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class RemoveGreaterCommand(io: IOManager, cm: CollectionManager): Command(io, cm){
+class RemoveGreaterCommand(ci: CommandInvoker): Command(ci) {
     override val tokenAmount: Int = 1
 
     override fun execute(token: List<String>) {
         super.execute(token)
         try {
-            val count: Int = cm.removeGreater(token[0].toLong())
-            io.write("Удалено $count элементов.\n")
+            val count: Int = ci.cm.removeGreater(token[0].toLong())
+            ci.io.write("Удалено $count элементов.\n")
         } catch (e: NumberFormatException) {
-            io.write("${token[0]} не является id элемента.\n")
+            ci.io.write("${token[0]} не является id элемента.\n")
         }
     }
 

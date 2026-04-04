@@ -27,7 +27,7 @@ class JsonFileIO(private val file: String){
      * @since 1.0
      */
     fun readFromFile(): Stack<City> {
-        val text: String = io.readLine()
+        val text: String = io.readFile()
         val decodedStack: Stack<City> = Stack<City>()
         if (text != "") {
             val decodedList: List<City> = decodeFromString<List<City>>(text)

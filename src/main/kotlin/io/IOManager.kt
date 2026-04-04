@@ -43,7 +43,7 @@ class IOManager() {
             IOType.CONSOLE -> readln()
             IOType.JSON -> throw IOException()
             IOType.FILE -> {
-                io.readLine()
+                io.readFile()
             }
         }
         return input

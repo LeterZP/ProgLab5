@@ -1,20 +1,18 @@
 package commands
 
-import core.CollectionManager
+import core.CommandInvoker
 import exceptions.InvalidAmountOfArgumentsException
-import io.IOManager
 
 /**
  * Абстрактный класс для всех команд.
  *
- * @param io [IOManager], с которым взаимодействует команда.
- * @param cm [CollectionManager], с которым взаимодействует команда.
+ * @param ci [CommandInvoker], откуда вызывается команда.
  *
  * @property tokenAmount Количество аргументов, которые принимает команда, типа [Int].
  *
  * @since 1.0
  */
-abstract class Command(protected val io: IOManager, protected val cm: CollectionManager) {
+abstract class Command(protected val ci: CommandInvoker) {
     open val tokenAmount: Int = 0
 
     override fun toString(): String {

@@ -1,23 +1,21 @@
 package commands
 
-import core.CollectionManager
-import io.IOManager
+import core.CommandInvoker
 
 /**
  * Команда для очистки коллекции.
  *
- * @param io [IOManager] для [Command].
- * @param cm [CollectionManager] для [Command].
+ * @param ci [CommandInvoker] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class ClearCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
+class ClearCommand(ci: CommandInvoker): Command(ci) {
     override fun execute(token: List<String>) {
         super.execute(token)
-        cm.clearCollection()
-        io.write("Коллекция отчищена." + "\n")
+        ci.cm.clearCollection()
+        ci.io.write("Коллекция отчищена." + "\n")
     }
 
     override fun describe(): String {

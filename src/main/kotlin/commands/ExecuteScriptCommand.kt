@@ -1,23 +1,30 @@
 package commands
 
-import core.CollectionManager
-import io.IOManager
+import core.CommandInvoker
 
 /**
  * Команда для исполнения скрипта.
  *
- * @param io [IOManager] для [Command].
- * @param cm [CollectionManager] для [Command].
+ * @param ci [CommandInvoker] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class ExecuteScriptCommand(io: IOManager, cm: CollectionManager): Command(io, cm) {
+class ExecuteScriptCommand(ci: CommandInvoker): Command(ci) {
     override val tokenAmount: Int = 1
 
     override fun execute(token: List<String>) {
         super.execute(token)
+        if (token[0] !in ci.executionHistory) {
+            ci.executionHistory.add(token[0])
+            val previousSource = ci.io.source
+            ci.io.source = token[0]
+            ci.addNext(ci.io.read())
+            ci.io.source = previousSource
+        } else {
+            ci.io.write("Обнаружена бесконечная рекурсия. Отказ в запуске скрипта ${token[0]}.\n")
+        }
     }
 
     override fun describe(): String {

@@ -1,23 +1,19 @@
 package commands
 
-import core.CollectionManager
 import core.CommandInvoker
 import exceptions.CommandNotFoundException
 import exceptions.InvalidAmountOfArgumentsException
-import io.IOManager
 
 /**
  * Команда для вывода списка доступных команд.
  *
- * @param io [IOManager] для [Command].
- * @param cm [CollectionManager] для [Command].
- * @param ci [CommandInvoker] с командами.
+ * @param ci [CommandInvoker] для [Command].
  *
  * @constructor Вызывает родительский конструктор класса [Command].
  *
  * @since 1.0
  */
-class HelpCommand(io: IOManager, cm: CollectionManager, private val ci: CommandInvoker): Command(io, cm) {
+class HelpCommand(ci: CommandInvoker): Command(ci) {
     override val tokenAmount: Int = 1
 
     /**
@@ -49,19 +45,19 @@ class HelpCommand(io: IOManager, cm: CollectionManager, private val ci: CommandI
     override fun execute(token: List<String>) {
         try {
             if (token.isEmpty()) {
-                io.write("Список доступных команд:" + "\n")
+                ci.io.write("Список доступных команд:" + "\n")
                 for (command in ci.commands.values) {
-                    io.write(getInfo(command) + "\n")
+                    ci.io.write(getInfo(command) + "\n")
                 }
             } else if (token.size == 1) {
                 if (token[0] in ci.commands.keys) {
-                    io.write(getFullInfo(ci.commands.get(token[0])!!) + "\n")
+                    ci.io.write(getFullInfo(ci.commands.get(token[0])!!) + "\n")
                 } else {
                     throw CommandNotFoundException(token[0])
                 }
             } else throw InvalidAmountOfArgumentsException(this, token.size)
         } catch (e: CommandNotFoundException) {
-            io.write(e.message + "\n")
+            ci.io.write(e.message + "\n")
         }
     }
 
