@@ -27,21 +27,21 @@ class InteractiveMode(
      * @since 1.0
      */
     private fun interaction() {
-        var work: Boolean = true
-        while (work) {
+        var isWorking: Boolean = true
+        while (isWorking) {
             try {
                 io.write("=> ")
                 ci.readCommand()
             } catch (e: ProgramExitException) {
                 io.write(e.message + "\n")
-                work = false
+                isWorking = false
             } catch (e: IOException) {
                 io.source = null
                 io.write("Ошибка чтения файла или записи в него.\n")
             } catch (e: Exception) {
                 io.write("Возникла непредвиденная ошибка: " + e.message + "\n")
                 io.write("Экстренное завершение работы.\n")
-                work = false
+                isWorking = false
             }
         }
     }
